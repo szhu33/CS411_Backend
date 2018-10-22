@@ -1,4 +1,4 @@
-CREATE TABLE Movie {
+CREATE TABLE Movie (
 	ImdbId VARCHAR(20)
 	url NVARCHAR(2083)
 	title VARCHAR(255)
@@ -8,4 +8,4 @@ CREATE TABLE Movie {
 	genres	VARCHAR(100)
 	rating FLOAT(2,1)
 	numOfVotes VARCHAR(255)
-}
+)

@@ -1,0 +1,11 @@
+CREATE TABLE Movie {
+	ImdbId VARCHAR(20)
+	url NVARCHAR(2083)
+	title VARCHAR(255)
+	isAdult	CHAR(1)
+	releaseYear CHAR(4)
+	runtime VARCHAR(5) 
+	genres	VARCHAR(100)
+	rating FLOAT(2,1)
+	numOfVotes VARCHAR(255)
+}

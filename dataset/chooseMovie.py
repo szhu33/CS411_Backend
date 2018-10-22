@@ -1,6 +1,7 @@
 import csv
 import codecs
 
+
 id_url = {}
 
 # read pic_url
@@ -8,10 +9,10 @@ with codecs.open('MovieGenre.csv', "r",encoding='utf-8', errors='ignore') as fda
     for row in fdata:
         row = row.split(",")
         name = 'tt' + row[0].zfill(7)
-        url = row[5]
-        id_url[name] = [url]
+        url = row[5][1:]
+        if url.startswith("http"):
+            id_url[name] = [url]
 
-del id_url['tt0imdbId']
 print(len(id_url))
 
 # schema
@@ -24,12 +25,12 @@ with open('title.basics.tsv','r') as input:
     for row in reader:
         if (len(row) > 8):
             id = row[0]
-            title = row[2]
+            title = row[2].replace("'","\\'")
             isAdult = row[4]
             startYear = row[5]
             runtime = row[7]
-            genres = row[8]
-            allGenres |= set(genres.split(","))
+            genres = row[8].replace(",", " ")
+            allGenres |= set(genres.split(" "))
             if id in id_url:
                 id_url[id].extend([title, isAdult, startYear, runtime, genres])
 print(allGenres)
@@ -51,11 +52,9 @@ with open('title.ratings.tsv','r') as input:
 print(len(id_url))
 
 ## Write to output
-with open('data_output.csv','w') as csv_file:
-    writer = csv.writer(csv_file)
+# id, pic_url, title, isAdult, startYear, runtime, genres, ratings, numOfVote]
+with open('data.sql','a') as file:
     for key, val in id_url.items():
-        row = [key] + val
-        row[1] = row[1][1:]
-        print(row)
-        if (len(row) == 9):
-            writer.writerow(row)
+        if (len(val) == 8):
+            row = 'INSERT INTO Movie VALUES (\'%s\',\'%s\',\'%s\',\'%s\',%s, %s,\'%s\',%s,%s);\n'%(key,val[0],val[1],val[2],val[3],val[4],val[5],val[6],val[7])
+            file.write(row)

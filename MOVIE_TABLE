@@ -7,5 +7,5 @@ CREATE TABLE Movie (
     runtime INT(3) ,
     genres VARCHAR(255),
     rating FLOAT(2,1),
-    numOfVotes INT
+    numOfVotes INT1
 )

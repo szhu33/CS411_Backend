@@ -1,0 +1,6 @@
+CREATE TABLE Users(
+	Username VARCHAR(10) PRIMARY KEY,
+	Email VARCHAR(50),
+	Password VARCHAR(260),
+	Preference VARCHAR(255)
+)

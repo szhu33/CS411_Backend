@@ -1,6 +1,0 @@
-CREATE TABLE User{
-	UserId VARCHAR(10)
-	Password VARCHAR(8)
-	Preference VARCHAR(255)
-	PRIMARY KEY UserId
-}

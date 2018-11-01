@@ -2,6 +2,7 @@ from flask import Flask, request, session, render_template, flash
 from dbconnect import connection
 from passlib.hash import sha256_crypt
 import gc
+from flask import jsonify
 from pymysql import escape_string as thwart # escape SQL injection(security vulnerability )
 
 from wtforms import Form, BooleanField, TextField, PasswordField, validators
@@ -18,6 +19,17 @@ app = Flask(__name__)
 @app.route('/')
 def homepage():
     return "Hi there, how ya doin?"
+
+@app.route('/movie', methods = ["GET"])
+def moviepage():
+	print("===in movie page")
+	c, conn = connection()
+	x = c.execute("SELECT * FROM Movie LIMIT 10")
+	print("number of affected rows",x)
+	movies = c.fetchall()
+	for x in movies:
+		print(x)
+	return jsonify(movies)
 
 @app.route('/tos')
 def tospage():

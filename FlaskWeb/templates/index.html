@@ -157,11 +157,11 @@
 <div class="row padding">
 	<script>
 		var img_list = new Array("team1.png", "team2.png", "team3.png", "team3.png");
-		for(var i = 0; i < img_list.length; i ++)
+		for(var i = 0; i < 1; i ++)
 			$('body').append(
 			'<div class="col-md-3">'+
 				'<div class="card">'+
-					'<img class="card-img-top" src="/static/img/"' + img_list[i]'>'+
+					'<img class="card-img-top" src="/static/img/"' + img_list[0] + '>'+
 					'<div class="card-body">' +
 						'<h4 class="card-title">John Doe</h4>'+
 						'<p class="card-text">John is an Internet entrepreneur with almost 20 years of experience.</p>' +
@@ -169,10 +169,8 @@
 							'See Profile' +
 						'</a>' +
 					'</div>' +
-				'</div>	' +
+				'</div>	'+
 			'</div>');
-
-
 	</script>
 
 

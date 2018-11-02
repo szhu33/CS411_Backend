@@ -52,7 +52,7 @@ def movieDetailPage(myImdbId):
     print("number of affected rows",x)
     movie = c.fetchall()
     printQueryResult(movie)
-    return render_template('index_post.html', movie=movie)
+    return render_template('movie_detail.html', movie=movie)
 
 @app.route('/tos')
 def tospage():

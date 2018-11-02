@@ -59,9 +59,8 @@ def postPage():
     print("===in post page")
     try:
         form = RegistrationForm(request.form)
-        #if request.form['whichForm'] == 'deleteForm':
-         #   print("I'm about to delete")
-        #print(request.form['whichForm'])
+        if request.form['deleteButton'] == 'delete':
+            print("I'm about to delete")
         if request.method == "POST":
             if request.form["postButton"] == "submit review":
                 postNum += 1

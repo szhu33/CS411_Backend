@@ -29,7 +29,7 @@ def moviepage():
 	movies = c.fetchall()
 	for x in movies:
 		print(x)
-	return jsonify(movies)
+	return render_template('index.html', value='pig')
 
 @app.route('/tos')
 def tospage():

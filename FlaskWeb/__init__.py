@@ -7,7 +7,7 @@ from pymysql import escape_string as thwart # escape SQL injection(security vuln
 
 from wtforms import Form, BooleanField, TextField, PasswordField, validators
 
-postNum = 0
+postNum = 15
 
 def printQueryResult(arr):
 	for x in arr:

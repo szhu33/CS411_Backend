@@ -9,43 +9,14 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 	<script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
-	<link href="style_post.css" rel="stylesheet">
-	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-	<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="favicon.ico">
-
-    <title>Fixed Top Navbar Example for Bootstrap</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="css/navbar-fixed-top.css" rel="stylesheet">
-
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="js/ie-emulation-modes-warning.js"></script>
-
-
+	<link href="/static/style.css" rel="stylesheet">
 </head>
 <body>
 
 <!-- Navigation -->
 <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
 <div class="container-fluid">
-	<a class="navbar-brand"><img src="img/logo.png"></a>
+	<a class="navbar-brand"><img src="/static/img/logo.png"></a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
 		<span class="navbar-toggler-icon"></span>
 	</button>
@@ -78,30 +49,11 @@
 	<li data-target="#slides" data-slide-to="1" class="active"></li>
 	<li data-target="#slides" data-slide-to="2" class="active"></li>
 </ul>
-<!--
-<div class="carousel-inner">
-	<div class="carousel-item active">
-		<img src="img/background.png">
-		<div class="carousel-caption">
-			<h1 class="display-2">Bootstrap</h1>
-			<h3>Complete Website Layout</h3>
-			<button type="button" class = "btn btn-outline-light btn-lg"> VIEW DEMO</button>
-			<button type="button" class = "btn btn-primary btn-lg"> VIEW DEMO</button>
-		</div>
-	</div>
-	<div class="carousel-item">
-		<img src="img/background2.png">
-	</div>
-	<div class="carousel-item">
-		<img src="img/background3.png">
-	</div>
-</div>
-</div>
--->
+
 
 <div class="carousel-inner">
 	<div class="carousel-item active">
-		<img src="img/background.png">
+		<img src="/static/img/background.png">
 		<div class="carousel-caption">
 			<h1 class="display-2">Bootstrap</h1>
 			<h3>Complete Website Layout</h3>
@@ -134,10 +86,10 @@
 		</div>
 	</div>
 	<div class="carousel-item">
-		<img src="img/background2.png">
+		<img src="/static/img/background2.png">
 	</div>
 	<div class="carousel-item">
-		<img src="img/background3.png">
+		<img src="/static/img/background3.png">
 	</div>
 </div>
 </div>
@@ -159,6 +111,10 @@
 	</div>
 </div>
 </div>
+
+
+
+
 <!--- Welcome Section -->
 <div class="container-fluid padding">
 <div class="row welcome text-center">
@@ -179,99 +135,77 @@
 		<div class="row padding">
 			<div class="col-md-12">
 				<div class="review-block">
-						<div class="col-md-12">
+						<div class="col-md-12 post_instance">
 							<img src="http://dummyimage.com/60x60/666/ffffff&text=No+Image" class="img-rounded">
-							<div class="review-block-name"><a href="#">nktailor</a></div>
-							<div class="review-block-date">January 29, 2016<br/>1 day ago</div>
-						</div>
+							<div> <strong>Anonymous</strong></div>
 
-						<div class="col-md-12">
-							<div class="review-block-rate">
-								<button type="button" class="btn btn-warning btn-xs" aria-label="Left Align">
-								  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-								</button>
-								<button type="button" class="btn btn-warning btn-xs" aria-label="Left Align">
-								  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-								</button>
-								<button type="button" class="btn btn-warning btn-xs" aria-label="Left Align">
-								  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-								</button>
-								<button type="button" class="btn btn-default btn-grey btn-xs" aria-label="Left Align">
-								  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-								</button>
-								<button type="button" class="btn btn-default btn-grey btn-xs" aria-label="Left Align">
-								  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-								</button>
-							</div>
-							<div class="review-block-title">this was nice in buy</div>
-							<div class="review-block-description">this was nice in buy. this was nice in buy. this was nice in buy. this was nice in buy this was nice in buy this was nice in buy this was nice in buy this was nice in buy</div>
+								<form method="POST">
+									Delete
+								    <input type="submit" value="Delete">
+								    <br>
+									Edit
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								    <input type="submit" value="Edit">
+								</form>
+
+							<div> <strong>Movie Name</strong> : hehe</div>
+							<div> <strong>Rating</strong> : 3.5</div>
+							<div> <strong>Comment</strong> : this was nice in buy. this was nice in buy. this was nice in buy. this was nice in buy this was nice in buy this was nice in buy this was nice in buy this was nice in buy</div>
 						</div>
+						<hr/>
+						<script>
+							function myFunc(vars) {
+					    		return vars
+							}
+							var posts_list =  myFunc({{posts|tojson}});
+							//window.alert()
+							for(var i = 0; i < posts_list.length; i ++)
+								$('body').append(
+									'<div class="col-md-12 post_instance">' +
+										'<img src="http://dummyimage.com/60x60/666/ffffff&text=No+Image" class="img-rounded">'+
+										'<div> <strong>Anonymous</strong></div>'+
+										'<form method="POST">'+
+											'Delete'+
+										    '<input type="submit" value="Delete">'+
+										    '<br>'+
+											'Edit'+
+											'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
+										    '<input type="submit" value="Edit">'+
+										'</form>' +
+										'<div> <strong>Movie Name</strong> :' + posts_list[i][4] + '</div>'+
+										'<div> <strong>Rating</strong> : ' + posts_list[i][2] + '</div>'+
+										'<div> <strong>Comment</strong> : ' + posts_list[i][1] + '</div>'+
+									'</div>'+
+									'<br>');
+						</script>
+
 
 						<hr/>
-
-						<div class="col-md-12">
-							<img src="http://dummyimage.com/60x60/666/ffffff&text=No+Image" class="img-rounded">
-							<div class="review-block-name"><a href="#">nktailor</a></div>
-							<div class="review-block-date">January 29, 2016<br/>1 day ago</div>
-						</div>
-
-						<div class="col-md-12">
-							<div class="review-block-rate">
-								<button type="button" class="btn btn-warning btn-xs" aria-label="Left Align">
-								  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-								</button>
-								<button type="button" class="btn btn-warning btn-xs" aria-label="Left Align">
-								  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-								</button>
-								<button type="button" class="btn btn-warning btn-xs" aria-label="Left Align">
-								  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-								</button>
-								<button type="button" class="btn btn-default btn-grey btn-xs" aria-label="Left Align">
-								  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-								</button>
-								<button type="button" class="btn btn-default btn-grey btn-xs" aria-label="Left Align">
-								  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-								</button>
-							</div>
-							<div class="review-block-title">this was nice in buy</div>
-							<div class="review-block-description">this was nice in buy. this was nice in buy. this was nice in buy. this was nice in buy this was nice in buy this was nice in buy this was nice in buy this was nice in buy</div>
-						</div>
-
-						<hr/>
-
-						<div class="col-md-12">
-							<img src="http://dummyimage.com/60x60/666/ffffff&text=No+Image" class="img-rounded">
-							<div class="review-block-name"><a href="#">nktailor</a></div>
-							<div class="review-block-date">January 29, 2016<br/>1 day ago</div>
-						</div>
-
-						<div class="col-md-12">
-							<div class="review-block-rate">
-								<button type="button" class="btn btn-warning btn-xs" aria-label="Left Align">
-								  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-								</button>
-								<button type="button" class="btn btn-warning btn-xs" aria-label="Left Align">
-								  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-								</button>
-								<button type="button" class="btn btn-warning btn-xs" aria-label="Left Align">
-								  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-								</button>
-								<button type="button" class="btn btn-default btn-grey btn-xs" aria-label="Left Align">
-								  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-								</button>
-								<button type="button" class="btn btn-default btn-grey btn-xs" aria-label="Left Align">
-								  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-								</button>
-							</div>
-							<div class="review-block-title">this was nice in buy</div>
-							<div class="review-block-description">this was nice in buy. this was nice in buy. this was nice in buy. this was nice in buy this was nice in buy this was nice in buy this was nice in buy this was nice in buy</div>
-						</div>
-
 				</div>
 			</div>
 		</div>
 
     </div> <!-- /container -->
+
+
+
+<body class = "container">
+	<div class="input_window">
+		<form method="POST">
+			Movie:<br>
+			<input  name="movie">
+			<br>
+			Ratings:<br>
+			<input name="rating">
+			<br>
+			Comments:<br>
+			<textarea rows="4" cols="50" name="review"> </textarea>
+			<br>
+		    <input type="submit" value="Submit">
+		</form>
+	</div>
+</body>
+
 
 
 
@@ -303,26 +237,8 @@
 
 
 
-<body class = "container">
-	<div class="input_window">
-		<form method="POST">
-			Movie:<br>
-			<input  name="movie">
-			<br>
-			Ratings:<br>
-			<input name="rating">
-			<br>
-			Comments:<br>
-			<textarea rows="4" cols="50" name="review"> </textarea>
-			<br>
-		    <input type="submit" value="Submit">
-		</form>
-	</div>
-</body>
-
-
 <!-- Card -->
-<div class="card card-image" style="background-image: url(img/background.png);">
+<div class="card card-image" style="background-image: url(/static/img/background.png);">
 
     <!-- Content -->
 	<div class="container-fluid padding">

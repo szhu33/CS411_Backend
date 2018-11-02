@@ -24,8 +24,8 @@ html, body {
 }
 
 .carousel-inner img {
-  width: 100%;
-  height: 100%;
+  width: 80%;
+  height: 80%;
 }
 
 .carousel-caption {
@@ -92,6 +92,10 @@ html, body {
   margin-bottom: 1rem;
 }
 
+.pad-left {
+margin-left: 50px;
+
+}
 
 
 .btn-grey{

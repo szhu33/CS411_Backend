@@ -57,6 +57,7 @@ html, body {
 
 .post_instance{
   border:1px solid #EFEFEF;
+  background-color: grey;
 }
 
 .form-control-borderless {

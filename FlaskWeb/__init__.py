@@ -22,14 +22,23 @@ def homepage():
 
 @app.route('/movie', methods = ["GET"])
 def moviepage():
-	print("===in movie page")
-	c, conn = connection()
-	x = c.execute("SELECT * FROM Movie LIMIT 10")
-	print("number of affected rows",x)
-	movies = c.fetchall()
-	for x in movies:
-		print(x)
-	return render_template('index.html', value='pig')
+    print("===in movie page")
+    c, conn = connection()
+    x = c.execute("SELECT * FROM Movie LIMIT 10")
+    print("number of affected rows",x)
+    movies = c.fetchall()
+    #for x in movies:
+    #    print(x)
+    movies =  [[str(y) for y in x] for x in movies]
+    #movies = ['\t'.join(x) for x in movies]
+    #movies = '\n'.join(movies)
+    print(type(movies))
+
+    #return render_template('index.html', value='pig')
+    return render_template('index.html', value='pig', movies_instance=movies)
+    #return render_template('index.html', movie_id=movie[0], movie_url=movie[1], movie_title=movie[2], movie_isadult=movie[3], movie_year=movie[4], movie_runtime=movie[5], movie_genres=movie[6], movie_rating=movie[7], movie_vote=movie[8])
+
+
 
 @app.route('/tos')
 def tospage():

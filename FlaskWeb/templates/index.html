@@ -153,29 +153,69 @@
 </div>
 
 <!--- Cards -->
-<div class="container-fluid padding">
-<div class="row padding">
 	<script>
-		var img_list = new Array("team1.png", "team2.png", "team3.png", "team3.png");
-		for(var i = 0; i < 1; i ++)
+		function myFunc(vars) {
+    		return vars
+		}
+		var movie_list =  myFunc({{movies_instance|tojson}});
+		//var img_list = new Array("team1.png", "team2.png", "team3.png", "team3.png");
+		//window.alert('pig pig');
+		//window.alert(movie_list[0][0]);
+		for(var i = 0; i < Math.floor(movie_list.length/4); i ++)
 			$('body').append(
+			'<div class="container-fluid padding">' +
+			'<div class="row padding">' +
 			'<div class="col-md-3">'+
 				'<div class="card">'+
-					'<img class="card-img-top" src="/static/img/"' + img_list[0] + '>'+
+					'<img class="card-img-top" src=' + movie_list[4*i + 0][1] + '>'+
 					'<div class="card-body">' +
-						'<h4 class="card-title">John Doe</h4>'+
+						'<h4 class="card-title">' + movie_list[4*i + 0][2] + '</h4>'+
+						'<p class="card-text">' + movie_list[4*i + 0][6]  + movie_list[4*i + 0][4] + '</p>'+
+						'<a href="#" class="btn btn-outline-secondary">'+
+							'See Profile' +
+						'</a>' +
+					'</div>' +
+				'</div>	'+
+			'</div>' +
+			'<div class="col-md-3">'+
+				'<div class="card">'+
+					'<img class="card-img-top" src=' + movie_list[4*i + 1][1] + '>'+
+					'<div class="card-body">' +
+						'<h4 class="card-title">' + movie_list[4*i + 1][2] + '</h4>'+
 						'<p class="card-text">John is an Internet entrepreneur with almost 20 years of experience.</p>' +
 						'<a href="#" class="btn btn-outline-secondary">'+
 							'See Profile' +
 						'</a>' +
 					'</div>' +
 				'</div>	'+
+			'</div>' +
+			'<div class="col-md-3">'+
+				'<div class="card">'+
+					'<img class="card-img-top" src=' + movie_list[4*i + 2][1] + '>'+
+					'<div class="card-body">' +
+						'<h4 class="card-title">' + movie_list[4*i + 2][2] +  '</h4>'+
+						'<p class="card-text">John is an Internet entrepreneur with almost 20 years of experience.</p>' +
+						'<a href="#" class="btn btn-outline-secondary">'+
+							'See Profile' +
+						'</a>' +
+					'</div>' +
+				'</div>	'+
+			'</div>' +
+			'<div class="col-md-3">'+
+				'<div class="card">'+
+					'<img class="card-img-top" src=' + movie_list[4*i + 3][1] + '>'+
+					'<div class="card-body">' +
+						'<h4 class="card-title">' + movie_list[4*i + 3][2] + '</h4>'+
+						'<p class="card-text">John is an Internet entrepreneur with almost 20 years of experience.</p>' +
+						'<a href="#" class="btn btn-outline-secondary">'+
+							'See Profile' +
+						'</a>' +
+					'</div>' +
+				'</div>	'+
+			'</div>' +
+			'</div>' +
 			'</div>');
 	</script>
-
-
-</div>
-</div>
 
 
 

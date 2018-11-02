@@ -15,6 +15,7 @@ class RegistrationForm(Form):
     accept_tos = BooleanField('I accept the <a href="/tos"/>Terms of Service</a>.', [validators.Required()])
 
 app = Flask(__name__)
+app.secret_key = b'\x9e\x02\xc2<W!A\xf8\xe2\x169:v\x97lC'
 
 @app.route('/')
 def homepage():
@@ -27,18 +28,25 @@ def moviepage():
     x = c.execute("SELECT * FROM Movie LIMIT 10")
     print("number of affected rows",x)
     movies = c.fetchall()
-    #for x in movies:
-    #    print(x)
+    for x in movies:
+        print(x)
     movies =  [[str(y) for y in x] for x in movies]
     #movies = ['\t'.join(x) for x in movies]
     #movies = '\n'.join(movies)
-    print(type(movies))
+    #print(type(movies))
 
-    #return render_template('index.html', value='pig')
     return render_template('index.html', value='pig', movies_instance=movies)
-    #return render_template('index.html', movie_id=movie[0], movie_url=movie[1], movie_title=movie[2], movie_isadult=movie[3], movie_year=movie[4], movie_runtime=movie[5], movie_genres=movie[6], movie_rating=movie[7], movie_vote=movie[8])
 
-
+@app.route('/movie/<myImdbId>', methods = ["GET"])
+def movieDetailPage():
+    print("===in movie detail page")
+    print("ImdbId", myImdbId)
+    c, conn = connection()
+    x = c.execute("SELECT * FROM Movie WHERE ImdbId = myImdbId")
+    print("number of affected rows",x)
+    movie = c.fetchone()
+    print(movie)
+    return "movie detail yeah"
 
 @app.route('/tos')
 def tospage():
@@ -46,6 +54,7 @@ def tospage():
 
 @app.route('/register/',methods = ["GET","POST"])
 def moviespage():
+    print("===in login page")
     try:
         form = RegistrationForm(request.form) # fill in html with form
         if request.method == "POST" and form.validate():

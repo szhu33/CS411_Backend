@@ -48,7 +48,7 @@
 <ul class="carousel-indicators">
 	<li data-target="#slides" data-slide-to="0" class="active"></li>
 	<li data-target="#slides" data-slide-to="1" class="active"></li>
-	<li data-target="#slides" data-slide-to="2" class="active"></li>	
+	<li data-target="#slides" data-slide-to="2" class="active"></li>
 </ul>
 
 <div class="carousel-inner">
@@ -83,7 +83,7 @@
 			                    </div>
 			</div>
 
-		
+
 		</div>
 	</div>
 	<div class="carousel-item">
@@ -162,13 +162,13 @@
 	<div class="input_window">
 		<form method="POST">
 			Movie:<br>
-			<input  name="movie">
+			<input  name="movie" value={{movie[0][2]}}>
 			<br>
 			Ratings:<br>
-			<input name="rating">
+			<input name="rating" value="aa">
 			<br>
 			Comments:<br>
-			<textarea rows="4" cols="50" name="review"> </textarea>
+			<textarea rows="4" cols="50" name="review">{{review}}</textarea>
 			<br>
 		    <input type="submit" value="Submit">
 		</form>
@@ -261,16 +261,3 @@
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-

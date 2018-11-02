@@ -165,11 +165,14 @@
 										'<div> <strong>Anonymous</strong></div>'+
 										'<form method="POST">'+
 											'Delete'+
+												'<input type="hidden" name="rating" value=' + posts_list[i][2]+ '>'+
+											'<input type="hidden" name="review" value=' + posts_list[i][1]+ '>'+
+											'<input type="hidden" name="ImbdId" value=' + posts_list[i][3]+ '>'+
 										    '<input type="submit" name="submitButton" value="Delete">'+
 										    '<br>'+
 											'Edit'+
 											'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
-										    '<input type="submit"name="submitButton" value="Edit">'+
+										    '<input type="submit" name="submitButton" value="Edit">'+
 										'</form>' +
 										'<div> <strong>Movie Name</strong> :' + posts_list[i][4] + '</div>'+
 										'<div> <strong>Rating</strong> : ' + posts_list[i][2] + '</div>'+

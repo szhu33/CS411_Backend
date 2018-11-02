@@ -2,7 +2,7 @@ from flask import Flask, request, session, render_template, flash
 from dbconnect import connection
 from passlib.hash import sha256_crypt
 import gc
-from flask import jsonify
+from flask import jsonify, redirect, url_for
 from pymysql import escape_string as thwart # escape SQL injection(security vulnerability )
 
 from wtforms import Form, BooleanField, TextField, PasswordField, validators
@@ -46,6 +46,7 @@ def moviepage():
 def movieDetailPage(myImdbId):
     print("===in movie detail page")
     print("ImdbId", myImdbId)
+    #print("rating", session["rating"])
     global postNum
     try:
         form = RegistrationForm(request.form)
@@ -58,7 +59,6 @@ def movieDetailPage(myImdbId):
             c, conn = connection()
             print(postNum, review, rating, myImdbId)
             x = c.execute("INSERT INTO Post(postId, review, rating, ImbdId, movieTitle) VALUES (%s, %s, %s, %s, %s)", (postNum, review, rating, myImdbId, movie))
-            print(x)
             conn.commit()
             print("number of affected rows",x)
             
@@ -82,13 +82,25 @@ def postPage():
         if request.method == "POST":
             if request.form["submitButton"] == "Delete":
                 print("Pressed delete button")
+                print("postId", request.form.get("postId"))
+                postId = request.form.get("postId")
                 c, conn = connection()
-                #x = c.execute("INSERT INTO Post(postId, review, rating, ImbdId, movieTitle) VALUES (%s, %s, %s, %s, %s)", (postNum, review, rating, ImbdId, movie))
-                #print(x)
-                #conn.commit()
-                #print("number of affected rows",x)
+                x = c.execute("DELETE FROM Post WHERE postId = %s", postId)
+                conn.commit()
+                print("number of affected rows",x)
             elif request.form["submitButton"] == "Edit":
-                print("Pressed delete button")
+                print("Pressed Edit button")
+                ImbdId = request.form.get("ImbdId")
+                c, conn = connection()
+                x = c.execute("SELECT * FROM Movie WHERE ImbdId = %s", ImbdId)
+                print("number of affected rows",x)
+                movie = c.fetchall()
+                printQueryResult(movie)
+                rating = request.form.get("rating")
+                print("raing", rating)
+                #movie=movie, review=request.form.get("review"), rating=request.form.get("rating")
+                return redirect('http://127.0.0.1:5000/movie/{}'.format(ImbdId), code=302)
+                
     except Exception as e:
         return str(e)
 

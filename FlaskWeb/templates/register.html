@@ -2,6 +2,7 @@
 
 {% block body %}
   <body class = "container">
+  <div class="card card-image" style="background-image: url(/static/img/background.png);">
     <h4> Register</h4>
     <hr>
     {% from "_fromhelper.html" import render_field %}
@@ -19,5 +20,6 @@
 		{% if error %}
 			<p class="error"><strong>Error:</strong>{{error}}</p>
 		{% endif %}
+ </div>
   </body>
 {% endblock %}

@@ -38,11 +38,13 @@ def moviepage():
     return render_template('index.html', value='pig', movies_instance=movies)
 
 @app.route('/movie/<myImdbId>', methods = ["GET"])
-def movieDetailPage():
+def movieDetailPage(myImdbId):
+    #print("*************************************************************************************************************")
     print("===in movie detail page")
     print("ImdbId", myImdbId)
     c, conn = connection()
-    x = c.execute("SELECT * FROM Movie WHERE ImdbId = myImdbId")
+    print('input signal is: {}'.format("SELECT * FROM Movie WHERE ImdbId = " + myImdbId))
+    x = c.execute("SELECT * FROM Movie WHERE ImdbId = " + myImdbId )
     print("number of affected rows",x)
     movie = c.fetchone()
     print(movie)

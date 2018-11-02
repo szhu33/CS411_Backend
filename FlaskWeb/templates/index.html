@@ -23,10 +23,10 @@
 	<div class="collapse navbar-collapse" id="navbarResponsive">
 		<ul class="navbar-nav ml-auto">
 			<li class="nav-item">
-				<a class="nav-link active" href="#">Forums</a>
+				<a class="nav-link active" href="">Forums</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="#">LOGIN</a>
+				<a class="nav-link" href="http://127.0.0.1:5000/register">LOGIN</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="#">SIGNUP</a>
@@ -147,7 +147,6 @@
 <div class="row welcome text-center">
 	<div class="col-12">
 		<h1 class="display-4">Meat the Team</h1>
-		<h3 class="display-2"> {{ value }}</h3>
 	</div>
 </div>
 </div>
@@ -167,7 +166,9 @@
 			'<div class="row padding">' +
 			'<div class="col-md-3">'+
 				'<div class="card">'+
+					'<a href="http://127.0.0.1:5000/movie/' + movie_list[4*i + 0][0]  + '">' +
 					'<img class="card-img-top" src=' + movie_list[4*i + 0][1] + '>'+
+					'</a>' +
 					'<div class="card-body">' +
 						'<h4 class="card-title">' + movie_list[4*i + 0][2] + '</h4>'+
 						'<p class="card-text">' + movie_list[4*i + 0][6]  + movie_list[4*i + 0][4] + '</p>'+
@@ -182,7 +183,7 @@
 					'<img class="card-img-top" src=' + movie_list[4*i + 1][1] + '>'+
 					'<div class="card-body">' +
 						'<h4 class="card-title">' + movie_list[4*i + 1][2] + '</h4>'+
-						'<p class="card-text">John is an Internet entrepreneur with almost 20 years of experience.</p>' +
+						'<p class="card-text">' + movie_list[4*i + 1][6]  + movie_list[4*i + 1][4] + '</p>'+
 						'<a href="#" class="btn btn-outline-secondary">'+
 							'See Profile' +
 						'</a>' +
@@ -194,7 +195,7 @@
 					'<img class="card-img-top" src=' + movie_list[4*i + 2][1] + '>'+
 					'<div class="card-body">' +
 						'<h4 class="card-title">' + movie_list[4*i + 2][2] +  '</h4>'+
-						'<p class="card-text">John is an Internet entrepreneur with almost 20 years of experience.</p>' +
+						'<p class="card-text">' + movie_list[4*i + 2][6]  + movie_list[4*i + 2][4] + '</p>'+
 						'<a href="#" class="btn btn-outline-secondary">'+
 							'See Profile' +
 						'</a>' +
@@ -206,7 +207,7 @@
 					'<img class="card-img-top" src=' + movie_list[4*i + 3][1] + '>'+
 					'<div class="card-body">' +
 						'<h4 class="card-title">' + movie_list[4*i + 3][2] + '</h4>'+
-						'<p class="card-text">John is an Internet entrepreneur with almost 20 years of experience.</p>' +
+						'<p class="card-text">' + movie_list[4*i + 3][6]  + movie_list[4*i + 3][4] + '</p>'+
 						'<a href="#" class="btn btn-outline-secondary">'+
 							'See Profile' +
 						'</a>' +

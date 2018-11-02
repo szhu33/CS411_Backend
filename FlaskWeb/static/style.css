@@ -45,6 +45,15 @@ html, body {
   text-shadow: 1px 1px 10px #000;
 }
 
+.crop {
+    height: 300px;
+    /*width: 400px;*/
+    overflow: hidden;
+}
+.crop img {
+    height: auto;
+    width: 100%;
+}
 
 
 .form-control-borderless {

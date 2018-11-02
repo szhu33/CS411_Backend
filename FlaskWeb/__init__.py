@@ -7,11 +7,8 @@ from pymysql import escape_string as thwart # escape SQL injection(security vuln
 
 from wtforms import Form, BooleanField, TextField, PasswordField, validators
 
-<<<<<<< HEAD
+
 postNum = 1
-=======
-postNum = 15
->>>>>>> 1e786817dfe77617b1f9ddb23fafc79e2e2d9b9f
 
 def printQueryResult(arr):
 	for x in arr:
@@ -45,46 +42,56 @@ def moviepage():
   
     return render_template('index.html', value='pig', movies_instance=movies)
 
-@app.route('/movie/<myImdbId>', methods = ["GET"])
+@app.route('/movie/<myImdbId>', methods = ["GET", "POST"])
 def movieDetailPage(myImdbId):
     print("===in movie detail page")
     print("ImdbId", myImdbId)
+    global postNum
+    try:
+        form = RegistrationForm(request.form)
+        if request.method == "POST":
+            print("Pressed postButton")
+            postNum += 1
+            movie = request.form['movie']
+            review = request.form['review']
+            rating = request.form['rating']
+            c, conn = connection()
+            print(postNum, review, rating, myImdbId)
+            x = c.execute("INSERT INTO Post(postId, review, rating, ImbdId, movieTitle) VALUES (%s, %s, %s, %s, %s)", (postNum, review, rating, myImdbId, movie))
+            print(x)
+            conn.commit()
+            print("number of affected rows",x)
+            
+    except Exception as e:
+        return str(e)
+
     c, conn = connection()
     sql = "SELECT * FROM Movie WHERE ImbdId = %s"
     x = c.execute(sql, myImdbId)
     print("number of affected rows",x)
     movie = c.fetchall()
     printQueryResult(movie)
+
     return render_template('movie_detail.html', movie=movie)
 
 @app.route('/post', methods = ["GET", "POST"])
 def postPage():
-    global postNum
     print("===in post page")
     try:
         form = RegistrationForm(request.form)
-        if request.form['deleteButton'] == 'delete':
-            print("I'm about to delete")
         if request.method == "POST":
-            if request.form["postButton"] == "submit review":
-                postNum += 1
-                movie = request.form['movie']
-                review = request.form['review']
-                rating = request.form['rating']
+            if request.form["submitButton"] == "Delete":
+                print("Pressed delete button")
                 c, conn = connection()
-                print("movie", movie, "review", "fill", "rating", "fill")
-                x = c.execute("SELECT * FROM Movie WHERE title = %s", movie)
-                ImbdId = c.fetchall()[0][0]
-                print("movie imbdId", ImbdId)
-                print(postNum, review, rating, ImbdId)
-                x = c.execute("INSERT INTO Post(postId, review, rating, ImbdId, movieTitle) VALUES (%s, %s, %s, %s, %s)", (postNum, review, rating, ImbdId, movie))
-                print(x)
-                conn.commit()
-                print("number of affected rows",x)
-			
+                #x = c.execute("INSERT INTO Post(postId, review, rating, ImbdId, movieTitle) VALUES (%s, %s, %s, %s, %s)", (postNum, review, rating, ImbdId, movie))
+                #print(x)
+                #conn.commit()
+                #print("number of affected rows",x)
+            elif request.form["submitButton"] == "Edit":
+                print("Pressed delete button")
     except Exception as e:
         return str(e)
-    print("after submitting")
+
     c, conn = connection()
     x = c.execute("SELECT * FROM Post")
     post = c.fetchall()

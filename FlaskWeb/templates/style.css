@@ -10,6 +10,9 @@ html, body {
 
 }
 
+.movie {
+  width: 100px;
+}
 .navbar {
   padding: .8rem;
   margin-bottom: 0;
@@ -99,10 +102,10 @@ html, body {
 
   }
 @media (max-width: 768px) {
-  
+
 }
 @media (max-width: 576px) {
-  
+
 }
 
 
@@ -168,11 +171,3 @@ Large (lg) devices (desktops, 992px and up)
 Extra (xl) large devices (large desktops, 1200px and up)
 @media (min-width: 1200px) { ... }
 */
-
-
-
-
-
-
-
-

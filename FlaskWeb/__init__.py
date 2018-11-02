@@ -7,7 +7,11 @@ from pymysql import escape_string as thwart # escape SQL injection(security vuln
 
 from wtforms import Form, BooleanField, TextField, PasswordField, validators
 
+<<<<<<< HEAD
+postNum = 1
+=======
 postNum = 15
+>>>>>>> 1e786817dfe77617b1f9ddb23fafc79e2e2d9b9f
 
 def printQueryResult(arr):
 	for x in arr:
@@ -59,21 +63,24 @@ def postPage():
     print("===in post page")
     try:
         form = RegistrationForm(request.form)
+        if request.form['deleteButton'] == 'delete':
+            print("I'm about to delete")
         if request.method == "POST":
-            postNum += 1
-            movie = request.form['movie']
-            review = request.form['review']
-            rating = request.form['rating']
-            c, conn = connection()
-            print("movie", movie, "review", "fill", "rating", "fill")
-            x = c.execute("SELECT * FROM Movie WHERE title = %s", movie)
-            ImbdId = c.fetchall()[0][0]
-            print("movie imbdId", ImbdId)
-            print(postNum, review, rating, ImbdId)
-            x = c.execute("INSERT INTO Post(postId, review, rating, ImbdId, movieTitle) VALUES (%s, %s, %s, %s, %s)", (postNum, review, rating, ImbdId, movie))
-            print(x)
-            conn.commit()
-            print("number of affected rows",x)
+            if request.form["postButton"] == "submit review":
+                postNum += 1
+                movie = request.form['movie']
+                review = request.form['review']
+                rating = request.form['rating']
+                c, conn = connection()
+                print("movie", movie, "review", "fill", "rating", "fill")
+                x = c.execute("SELECT * FROM Movie WHERE title = %s", movie)
+                ImbdId = c.fetchall()[0][0]
+                print("movie imbdId", ImbdId)
+                print(postNum, review, rating, ImbdId)
+                x = c.execute("INSERT INTO Post(postId, review, rating, ImbdId, movieTitle) VALUES (%s, %s, %s, %s, %s)", (postNum, review, rating, ImbdId, movie))
+                print(x)
+                conn.commit()
+                print("number of affected rows",x)
 			
     except Exception as e:
         return str(e)

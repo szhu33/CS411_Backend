@@ -74,6 +74,36 @@ def movieDetailPage(myImdbId):
 
     return render_template('movie_detail.html', movie=movie)
 
+@app.route('/movie_edit/<ImbdId>&<postId>', methods = ["GET", "POST"])
+def movieDetailEditPage(ImbdId, postId):
+    print("===in movie detail edit page")
+    print("postId", postId)
+    print("ImbdId",ImbdId)
+    #print("rating", session["rating"])
+    try:
+        form = RegistrationForm(request.form)
+        if request.method == "POST":
+            print("Pressed postButton")
+            #movie = request.form['movie']
+            review = request.form['review']
+            rating = request.form['rating']
+            c, conn = connection()
+            print(postNum, review, rating, ImbdId)
+            x = c.execute("UPDATE Post SET rating=%s, review=%s WHERE postId=%s", (rating, review, postId))
+            conn.commit()
+            print("number of affected rows",x)
+            
+    except Exception as e:
+        return str(e)
+
+    c, conn = connection()
+    x = c.execute("SELECT * FROM Movie WHERE ImbdId = %s", ImbdId)
+    print("number of affected rows",x)
+    movie = c.fetchall()
+    printQueryResult(movie)
+
+    return render_template('movie_detail_edit.html', movie=movie)
+
 @app.route('/post', methods = ["GET", "POST"])
 def postPage():
     print("===in post page")
@@ -97,9 +127,10 @@ def postPage():
                 movie = c.fetchall()
                 printQueryResult(movie)
                 rating = request.form.get("rating")
+                postId = request.form.get("postId")
                 print("raing", rating)
                 #movie=movie, review=request.form.get("review"), rating=request.form.get("rating")
-                return redirect('http://127.0.0.1:5000/movie/{}'.format(ImbdId), code=302)
+                return redirect('http://127.0.0.1:5000/movie_edit/{}&{}'.format(ImbdId,postId), code=302)
                 
     except Exception as e:
         return str(e)

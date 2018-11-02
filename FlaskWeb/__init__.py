@@ -7,6 +7,10 @@ from pymysql import escape_string as thwart # escape SQL injection(security vuln
 
 from wtforms import Form, BooleanField, TextField, PasswordField, validators
 
+def printQueryResult(arr):
+	for x in arr:
+		print(x)
+
 class RegistrationForm(Form):
     username = TextField('Username',[validators.Length(min=4, max=10)])
     email = TextField('Email Address',[validators.Length(min=6, max=50)])
@@ -39,16 +43,15 @@ def moviepage():
 
 @app.route('/movie/<myImdbId>', methods = ["GET"])
 def movieDetailPage(myImdbId):
-    #print("*************************************************************************************************************")
     print("===in movie detail page")
     print("ImdbId", myImdbId)
     c, conn = connection()
-    print('input signal is: {}'.format("SELECT * FROM Movie WHERE ImdbId = " + myImdbId))
-    x = c.execute("SELECT * FROM Movie WHERE ImdbId = " + myImdbId )
+    sql = "SELECT * FROM Movie WHERE ImbdId = %s"
+    x = c.execute(sql, myImdbId)
     print("number of affected rows",x)
-    movie = c.fetchone()
-    print(movie)
-    return "movie detail yeah"
+    movie = c.fetchall()
+    printQueryResult(movie)
+    return render_template('xxx.html', movie=movies)
 
 @app.route('/tos')
 def tospage():

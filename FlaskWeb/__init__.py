@@ -33,7 +33,7 @@ def homepage():
 def moviepage():
     print("===in movie page")
     c, conn = connection()
-    x = c.execute("SELECT * FROM Movie LIMIT 10")
+    x = c.execute("SELECT * FROM Movie LIMIT 20")
     print("number of affected rows",x)
     movies = c.fetchall()
     for x in movies:

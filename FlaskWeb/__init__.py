@@ -7,6 +7,8 @@ from pymysql import escape_string as thwart # escape SQL injection(security vuln
 
 from wtforms import Form, BooleanField, TextField, PasswordField, validators
 
+postNum = 0
+
 def printQueryResult(arr):
 	for x in arr:
 		print(x)
@@ -23,6 +25,7 @@ app.secret_key = b'\x9e\x02\xc2<W!A\xf8\xe2\x169:v\x97lC'
 
 @app.route('/')
 def homepage():
+    #postNum = 0
     return "Hi there, how ya doin?"
 
 @app.route('/movie', methods = ["GET"])
@@ -35,11 +38,7 @@ def moviepage():
     for x in movies:
         print(x)
     movies =  [[str(y) for y in x] for x in movies]
-    #movies = ['\t'.join(x) for x in movies]
-    #movies = '\n'.join(movies)
-    #print(type(movies))
-
-    #return render_template('index.html', value='pig', movies_instance=movies)
+  
     return render_template('index.html', value='pig', movies_instance=movies)
 
 @app.route('/movie/<myImdbId>', methods = ["GET"])
@@ -54,12 +53,40 @@ def movieDetailPage(myImdbId):
     printQueryResult(movie)
     return render_template('movie_detail.html', movie=movie)
 
-@app.route('/tos')
-def tospage():
-    return "Fake term of service"
+@app.route('/post', methods = ["GET", "POST"])
+def postPage():
+    global postNum
+    print("===in post page")
+    try:
+        form = RegistrationForm(request.form)
+        if request.method == "POST":
+            postNum += 1
+            movie = request.form['movie']
+            review = request.form['review']
+            rating = request.form['rating']
+            c, conn = connection()
+            print("movie", movie, "review", "fill", "rating", "fill")
+            x = c.execute("SELECT * FROM Movie WHERE title = %s", movie)
+            ImbdId = c.fetchall()[0][0]
+            print("movie imbdId", ImbdId)
+            print(postNum, review, rating, ImbdId)
+            x = c.execute("INSERT INTO Post(postId, review, rating, ImbdId, movieTitle) VALUES (%s, %s, %s, %s, %s)", (postNum, review, rating, ImbdId, movie))
+            print(x)
+            conn.commit()
+            print("number of affected rows",x)
+			
+    except Exception as e:
+        return str(e)
+    print("after submitting")
+    c, conn = connection()
+    x = c.execute("SELECT * FROM Post")
+    post = c.fetchall()
+    printQueryResult(post)
+    
+    return render_template('post.html', form=form, posts=post)
 
 @app.route('/register/',methods = ["GET","POST"])
-def moviespage():
+def loginPage():
     print("===in login page")
     try:
         form = RegistrationForm(request.form) # fill in html with form

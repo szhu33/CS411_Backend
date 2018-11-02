@@ -39,6 +39,7 @@ def moviepage():
     #movies = '\n'.join(movies)
     #print(type(movies))
 
+    #return render_template('index.html', value='pig', movies_instance=movies)
     return render_template('index.html', value='pig', movies_instance=movies)
 
 @app.route('/movie/<myImdbId>', methods = ["GET"])
@@ -51,7 +52,7 @@ def movieDetailPage(myImdbId):
     print("number of affected rows",x)
     movie = c.fetchall()
     printQueryResult(movie)
-    return render_template('xxx.html', movie=movies)
+    return render_template('index_post.html', movie=movie)
 
 @app.route('/tos')
 def tospage():

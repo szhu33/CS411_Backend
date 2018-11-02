@@ -2,13 +2,12 @@ from flask import Flask, request, session, render_template, flash
 from dbconnect import connection
 from passlib.hash import sha256_crypt
 import gc
+import os.path
+from pathlib import Path
 from flask import jsonify, redirect, url_for
 from pymysql import escape_string as thwart # escape SQL injection(security vulnerability )
 
 from wtforms import Form, BooleanField, TextField, PasswordField, validators
-
-
-postNum = 1
 
 def printQueryResult(arr):
 	for x in arr:
@@ -46,8 +45,20 @@ def moviepage():
 def movieDetailPage(myImdbId):
     print("===in movie detail page")
     print("ImdbId", myImdbId)
-    #print("rating", session["rating"])
     global postNum
+    if os.path.exists("./post_count.txt"):
+        f=open("post_count.txt", "r+")
+        content = f.read()
+        print(content) 
+        if content == "":
+            postNum = 0
+        else:
+            postNum = int(content)
+    else:
+        f=open("post_count.txt", "w+")
+        postNum = 0
+    print("postNum", postNum)
+    
     try:
         form = RegistrationForm(request.form)
         if request.method == "POST":
@@ -60,15 +71,21 @@ def movieDetailPage(myImdbId):
             print(postNum, review, rating, myImdbId)
             x = c.execute("INSERT INTO Post(postId, review, rating, ImbdId, movieTitle) VALUES (%s, %s, %s, %s, %s)", (postNum, review, rating, myImdbId, movie))
             conn.commit()
-            print("number of affected rows",x)
+            if int(x)>0:
+                print("write", str(postNum))
+                f.seek(0)
+                f.truncate()
+                f.write(str(postNum))
+            print("INSERT: number of affected rows",x)
             
     except Exception as e:
         return str(e)
 
+    f.close()
     c, conn = connection()
     sql = "SELECT * FROM Movie WHERE ImbdId = %s"
     x = c.execute(sql, myImdbId)
-    print("number of affected rows",x)
+    print("SELECT: number of affected rows",x)
     movie = c.fetchall()
     printQueryResult(movie)
 
@@ -77,9 +94,7 @@ def movieDetailPage(myImdbId):
 @app.route('/movie_edit/<ImbdId>&<postId>', methods = ["GET", "POST"])
 def movieDetailEditPage(ImbdId, postId):
     print("===in movie detail edit page")
-    print("postId", postId)
-    print("ImbdId",ImbdId)
-    #print("rating", session["rating"])
+    print("postId", postId, "ImbdId",ImbdId)
     try:
         form = RegistrationForm(request.form)
         if request.method == "POST":
@@ -91,14 +106,14 @@ def movieDetailEditPage(ImbdId, postId):
             print(postNum, review, rating, ImbdId)
             x = c.execute("UPDATE Post SET rating=%s, review=%s WHERE postId=%s", (rating, review, postId))
             conn.commit()
-            print("number of affected rows",x)
+            print("UPDATE: number of affected rows",x)
             
     except Exception as e:
         return str(e)
 
     c, conn = connection()
     x = c.execute("SELECT * FROM Movie WHERE ImbdId = %s", ImbdId)
-    print("number of affected rows",x)
+    print("SELECT: number of affected rows",x)
     movie = c.fetchall()
     printQueryResult(movie)
 
@@ -117,19 +132,18 @@ def postPage():
                 c, conn = connection()
                 x = c.execute("DELETE FROM Post WHERE postId = %s", postId)
                 conn.commit()
-                print("number of affected rows",x)
+                print("DELETE: number of affected rows",x)
             elif request.form["submitButton"] == "Edit":
                 print("Pressed Edit button")
                 ImbdId = request.form.get("ImbdId")
                 c, conn = connection()
                 x = c.execute("SELECT * FROM Movie WHERE ImbdId = %s", ImbdId)
-                print("number of affected rows",x)
+                print("SELECT: number of affected rows",x)
                 movie = c.fetchall()
                 printQueryResult(movie)
                 rating = request.form.get("rating")
                 postId = request.form.get("postId")
                 print("raing", rating)
-                #movie=movie, review=request.form.get("review"), rating=request.form.get("rating")
                 return redirect('http://127.0.0.1:5000/movie_edit/{}&{}'.format(ImbdId,postId), code=302)
                 
     except Exception as e:

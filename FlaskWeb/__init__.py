@@ -8,7 +8,7 @@ from flask import jsonify, redirect, url_for
 from pymysql import escape_string as thwart # escape SQL injection(security vulnerability )
 from flask_socketio import SocketIO, emit, join_room
 from wtforms import Form, BooleanField, TextField, PasswordField, validators
-from datatime import datetime
+from datetime import datetime
 
 def printQueryResult(arr):
 	for x in arr:
@@ -37,14 +37,14 @@ def test_connect(message):
 @socketio.on('sendInquiry')
 def send_inquiry(msg):
     createDate = datetime.now()
-	print("User", session['username'], "sent", msg, "at time", createDate)
+    print("User", session['username'], "sent", msg, "at time", createDate)
     c, conn = connection()
-	x = c.execute("INSERT INTO Message(Username, Message, CreateDate) VALUES (%s, %s, %s)", (session['username'], msg, createDate))
+    x = c.execute("INSERT INTO Message(Username, Message, CreateDate) VALUES (%s, %s, %s)", (session['username'], msg, createDate))
     conn.commit()
     if int(x)>0:
         print("INSERT MESSAGE SUCCESS")
     print("INSERT: number of affected rows",x)
-	data = {
+    data = {
         'time': createDate.strftime('%H:%M'),
         'Name': session['username'],
         'msg': msg['msg']
@@ -187,7 +187,7 @@ def postPage():
 
     return render_template('post.html', form=form, posts=post)
 
-@app.route('/user/<Username>', methods = ["GET", "POST"])
+@app.route('/user/<username>', methods = ["GET", "POST"])
 def userProfilePage(username):
     print("In User Profile Page")
     c, conn = connection()
@@ -215,7 +215,7 @@ def loginPage():
 
         username = form.username.data
         #email = form.email.data
-        password = sha256_crypt.encrypt(str(form.password.data))
+        #password = sha256_crypt.encrypt(str(form.password.data))
         print(username, password)
         c, conn = connection()
         x = c.execute("SELECT * FROM Users WHERE Username = (%s)", (thwart(username)))
@@ -228,11 +228,11 @@ def loginPage():
         else:
             flash("Please register first!")
 
-    return render_template("register.html", form=form)
+    return render_template("login.html", form=form)
 
 @app.route('/register/',methods = ["GET","POST"])
 def registerPage():
-    print("===in login page")
+    print("===in register page")
     try:
         form = RegistrationForm(request.form) # fill in html with form
         if request.method == "POST" and form.validate():
@@ -243,7 +243,6 @@ def registerPage():
             print(username, email, password)
             c, conn = connection()
             x = c.execute("SELECT * FROM Users WHERE Username = (%s)", (thwart(username)))
-            print(int(x))
             if int(x) > 0:
                 flash("The username is already taken, please choose another one.")
                 return render_template('register.html', form = form)
@@ -261,7 +260,7 @@ def registerPage():
                 session['logged_in'] = True
                 session['username'] = username
 
-                return redirect("127.0.0.1:5000/user/%s", username)
+                return redirect('http://127.0.0.1:5000/user/{}'.format(username), code=302)
 
     except Exception as e:
         return str(e)

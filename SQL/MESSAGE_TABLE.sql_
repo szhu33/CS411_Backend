@@ -1,0 +1,7 @@
+CREATE TABLE Message(
+	MessageId INTEGER NOT NULL AUTO_INCREMENT,
+	Username VARCHAR(10),
+	Message TEXT,
+	CreateDate DATETIME,
+	PRIMARY KEY (MessageId)
+);

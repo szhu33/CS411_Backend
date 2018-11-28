@@ -30,8 +30,7 @@ def homepage():
     x = c.execute("SELECT * FROM Movie LIMIT 20")
     print("number of affected rows",x)
     movies = c.fetchall()
-    for x in movies:
-        print(x)
+    printQueryResult(movies)
     movies =  [[str(y) for y in x] for x in movies]
 
     global postNum
@@ -71,6 +70,7 @@ def movieDetailPage(myImdbId):
     print("ImdbId", myImdbId)
     global postNum
     print("postNum", postNum)
+    print("session_username", session_username)
 
     try:
         form = RegistrationForm(request.form)
@@ -82,7 +82,7 @@ def movieDetailPage(myImdbId):
             rating = request.form['rating']
             c, conn = connection()
             print(postNum, review, rating, myImdbId)
-            x = c.execute("INSERT INTO Post(postId, review, rating, ImdbId, movieTitle) VALUES (%s, %s, %s, %s, %s)", (postNum, review, rating, myImdbId, movie))
+            x = c.execute("INSERT INTO Post(postId, review, rating, ImdbId, movieTitle, Username) VALUES (%s, %s, %s, %s, %s, %s)", (postNum, review, rating, myImdbId, movie, session_username))
             conn.commit()
             if int(x)>0:
                 print("write", str(postNum))
@@ -170,9 +170,25 @@ def postPage():
 
     return render_template('post.html', form=form, posts=post)
 
+@app.route('/user/<Username>', methods = ["GET", "POST"])
+def userProfilePage(username):
+    c, conn = connection()
+    x = c.execute("SELECT * FROM Users WHERE Username = %s", username)
+    print("number of affected rows",x)
+    result = c.fetchall()
+    printQueryResult(user)
+    user = result[0]
+    email = user[1]
+
+    x = c.execute("SELECT * FROM Users WHERE Username = %s", username)
+	
+
+
+
 @app.route('/register/',methods = ["GET","POST"])
 def loginPage():
     print("===in login page")
+    global session_username
     try:
         form = RegistrationForm(request.form) # fill in html with form
         if request.method == "POST" and form.validate():
@@ -190,6 +206,7 @@ def loginPage():
             else:
                 c.execute("INSERT INTO Users (Username,Email,Password) VALUES (%s, %s, %s)", (thwart(username), thwart(email), thwart(password)))
                 conn.commit()
+                session_username = username
 
                 flash("Thanks for regitering!")
                 c.close()

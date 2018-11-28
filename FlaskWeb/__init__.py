@@ -101,10 +101,10 @@ def movieDetailPage(myImdbId):
 
     return render_template('movie_detail.html', movie=movie)
 
-@app.route('/movie_edit/<ImdbID>&<postId>', methods = ["GET", "POST"])
-def movieDetailEditPage(ImdbID, postId):
+@app.route('/movie_edit/<ImdbId>&<postId>', methods = ["GET", "POST"])
+def movieDetailEditPage(ImdbId, postId):
     print("===in movie detail edit page")
-    print("postId", postId, "ImdbID",ImdbID)
+    print("postId", postId, "ImdbId",ImdbId)
     try:
         form = RegistrationForm(request.form)
         if request.method == "POST":
@@ -113,7 +113,7 @@ def movieDetailEditPage(ImdbID, postId):
             review = request.form['review']
             rating = request.form['rating']
             c, conn = connection()
-            print(postNum, review, rating, ImdbID)
+            print(postNum, review, rating, ImdbId)
             x = c.execute("UPDATE Post SET rating=%s, review=%s WHERE postId=%s", (rating, review, postId))
             conn.commit()
             print("UPDATE: number of affected rows",x)
@@ -122,7 +122,7 @@ def movieDetailEditPage(ImdbID, postId):
         return str(e)
 
     c, conn = connection()
-    x = c.execute("SELECT * FROM Movie WHERE ImdbID = %s", ImdbID)
+    x = c.execute("SELECT * FROM Movie WHERE ImdbId = %s", ImdbId)
     print("SELECT: number of affected rows",x)
     movie = c.fetchall()
     printQueryResult(movie)
@@ -145,16 +145,17 @@ def postPage():
                 print("DELETE: number of affected rows",x)
             elif request.form["submitButton"] == "Edit":
                 print("Pressed Edit button")
-                ImdbID = request.form.get("ImdbID")
+                ImdbId = request.form.get("ImdbId")
+                print("ImdbId: ", ImdbId)
                 c, conn = connection()
-                x = c.execute("SELECT * FROM Movie WHERE ImdbID = %s", ImdbID)
+                x = c.execute("SELECT * FROM Movie WHERE ImdbId = %s", ImdbId)
                 print("SELECT: number of affected rows",x)
                 movie = c.fetchall()
                 printQueryResult(movie)
                 rating = request.form.get("rating")
                 postId = request.form.get("postId")
                 print("raing", rating)
-                return redirect('http://127.0.0.1:5000/movie_edit/{}&{}'.format(ImdbID,postId), code=302)
+                return redirect('http://127.0.0.1:5000/movie_edit/{}&{}'.format(ImdbId,postId), code=302)
 
     except Exception as e:
         return str(e)

@@ -30,9 +30,10 @@ def homepage():
     x = c.execute("SELECT * FROM Movie LIMIT 20")
     print("number of affected rows",x)
     movies = c.fetchall()
-    for x in movies:
-        print(x)
+    printQueryResult(movies)
     movies =  [[str(y) for y in x] for x in movies]
+
+    
 
     return render_template('index.html', value='pig', movies_instance=movies)
 
@@ -59,43 +60,27 @@ def searchpage():
 def movieDetailPage(myImdbId):
     print("===in movie detail page")
     print("ImdbId", myImdbId)
-    global postNum
-    if os.path.exists("./post_count.txt"):
-        f=open("post_count.txt", "r+")
-        content = f.read()
-        print(content)
-        if content == "":
-            postNum = 0
-        else:
-            postNum = int(content)
-    else:
-        f=open("post_count.txt", "w+")
-        postNum = 0
-    print("postNum", postNum)
+    
+    print("session['username']", session['username'])
 
     try:
         form = RegistrationForm(request.form)
         if request.method == "POST":
             print("Pressed postButton")
-            postNum += 1
             movie = request.form['movie']
             review = request.form['review']
             rating = request.form['rating']
             c, conn = connection()
-            print(postNum, review, rating, myImdbId)
-            x = c.execute("INSERT INTO Post(postId, review, rating, ImdbId, movieTitle) VALUES (%s, %s, %s, %s, %s)", (postNum, review, rating, myImdbId, movie))
+            print( review, rating, myImdbId)
+            x = c.execute("INSERT INTO Post( review, rating, ImdbId, movieTitle, Username) VALUES ( %s, %s, %s, %s, %s)", ( review, rating, myImdbId, movie, session['username']))
             conn.commit()
             if int(x)>0:
-                print("write", str(postNum))
-                f.seek(0)
-                f.truncate()
-                f.write(str(postNum))
+                print("INSERT POST SUCCESS")
             print("INSERT: number of affected rows",x)
 
     except Exception as e:
         return str(e)
 
-    f.close()
     c, conn = connection()
     sql = "SELECT * FROM Movie WHERE ImdbId = %s"
     x = c.execute(sql, myImdbId)
@@ -117,7 +102,7 @@ def movieDetailEditPage(ImdbId, postId):
             review = request.form['review']
             rating = request.form['rating']
             c, conn = connection()
-            print(postNum, review, rating, ImdbId)
+            print( review, rating, ImdbId)
             x = c.execute("UPDATE Post SET rating=%s, review=%s WHERE postId=%s", (rating, review, postId))
             conn.commit()
             print("UPDATE: number of affected rows",x)
@@ -171,8 +156,50 @@ def postPage():
 
     return render_template('post.html', form=form, posts=post)
 
-@app.route('/register/',methods = ["GET","POST"])
+@app.route('/user/<Username>', methods = ["GET", "POST"])
+def userProfilePage(username):
+    c, conn = connection()
+    x = c.execute("SELECT * FROM Users WHERE Username = %s", username)
+    print("number of affected rows",x)
+    result = c.fetchall()
+    printQueryResult(user)
+    user = result[0]
+    email = user[1]
+
+    x = c.execute("SELECT * FROM Post WHERE Username = %s", username)
+    print("number of affected rows",x)
+    posts = c.fetchall()
+
+    #x = c.execute("SELECT * FROM Post WHERE Username = %s", username)
+    #print("number of affected rows",x)
+    #posts = c.fetchall()
+    return render_template('user.html', myUsername=username, myEmail=email, myPosts=posts) 
+	
+@app.route('/login/',methods = ["GET","POST"])
 def loginPage():
+    print("===in login page")
+    form = RegistrationForm(request.form) # fill in html with form
+    if request.method == "POST" and form.validate():
+
+        username = form.username.data
+        #email = form.email.data
+        password = sha256_crypt.encrypt(str(form.password.data))
+        print(username, password)
+        c, conn = connection()
+        x = c.execute("SELECT * FROM Users WHERE Username = (%s)", (thwart(username)))
+        print(int(x))
+        if int(x) > 0:
+			# set session for this new user
+            session['logged_in'] = True
+            session['username'] = username
+            return render_template('register.html', form = form)
+        else:
+            flash("Please register first!")
+
+    return render_template("register.html", form=form)
+
+@app.route('/register/',methods = ["GET","POST"])
+def registerPage():
     print("===in login page")
     try:
         form = RegistrationForm(request.form) # fill in html with form

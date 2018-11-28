@@ -70,7 +70,7 @@ def movieDetailPage(myImdbId):
     print("ImdbId", myImdbId)
     global postNum
     print("postNum", postNum)
-    print("session_username", session_username)
+    print("session['username']", session['username'])
 
     try:
         form = RegistrationForm(request.form)
@@ -82,7 +82,7 @@ def movieDetailPage(myImdbId):
             rating = request.form['rating']
             c, conn = connection()
             print(postNum, review, rating, myImdbId)
-            x = c.execute("INSERT INTO Post(postId, review, rating, ImdbId, movieTitle, Username) VALUES (%s, %s, %s, %s, %s, %s)", (postNum, review, rating, myImdbId, movie, session_username))
+            x = c.execute("INSERT INTO Post(postId, review, rating, ImdbId, movieTitle, Username) VALUES (%s, %s, %s, %s, %s, %s)", (postNum, review, rating, myImdbId, movie, session['username']))
             conn.commit()
             if int(x)>0:
                 print("write", str(postNum))
@@ -189,11 +189,32 @@ def userProfilePage(username):
     #posts = c.fetchall()
     return render_template('user.html', myUsername=username, myEmail=email, myPosts=posts) 
 	
-
-@app.route('/register/',methods = ["GET","POST"])
+@app.route('/login/',methods = ["GET","POST"])
 def loginPage():
     print("===in login page")
-    global session_username
+    form = RegistrationForm(request.form) # fill in html with form
+    if request.method == "POST" and form.validate():
+
+        username = form.username.data
+        #email = form.email.data
+        password = sha256_crypt.encrypt(str(form.password.data))
+        print(username, password)
+        c, conn = connection()
+        x = c.execute("SELECT * FROM Users WHERE Username = (%s)", (thwart(username)))
+        print(int(x))
+        if int(x) > 0:
+			# set session for this new user
+            session['logged_in'] = True
+            session['username'] = username
+            return render_template('register.html', form = form)
+        else:
+            flash("Please register first!")
+
+    return render_template("register.html", form=form)
+
+@app.route('/register/',methods = ["GET","POST"])
+def registerPage():
+    print("===in login page")
     try:
         form = RegistrationForm(request.form) # fill in html with form
         if request.method == "POST" and form.validate():
@@ -211,7 +232,6 @@ def loginPage():
             else:
                 c.execute("INSERT INTO Users (Username,Email,Password) VALUES (%s, %s, %s)", (thwart(username), thwart(email), thwart(password)))
                 conn.commit()
-                session_username = username
 
                 flash("Thanks for regitering!")
                 c.close()

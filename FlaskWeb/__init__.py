@@ -56,7 +56,7 @@ def chatPage():
 	return render_template('chat.html', username=session['username'])
 
 
-@app.route('/')
+@app.route('/', methods = ["GET"])
 def homepage():
     print("===in movie page")
     c, conn = connection()
@@ -68,20 +68,24 @@ def homepage():
 
     return render_template('index.html', value='pig', movies_instance=movies)
 
-@app.route('/search/<keyword>', methods = ["GET"])
-def moviepage(keyword):
-
-    print("===in movie page")
+@app.route('/search', methods = ["GET"])
+def searchpage():
+    print("===in search page")
     c, conn = connection()
-    x = c.execute("SELECT * FROM Movie LIMIT 20")
+    keyword = request.args.get('keyword')
+    likeString = "'%" + keyword + "%'"
+    print(likeString)
+    searchsql = "SELECT * FROM Movie WHERE title LIKE %s"
+    print(searchsql)
+    x = c.execute(searchsql, likeString)
     print("number of affected rows",x)
     movies = c.fetchall()
     for x in movies:
         print(x)
     movies =  [[str(y) for y in x] for x in movies]
+    print(movies)
 
     return render_template('index.html', value='pig', movies_instance=movies)
-
 
 @app.route('/movie/<myImdbId>', methods = ["GET", "POST"])
 def movieDetailPage(myImdbId):

@@ -33,19 +33,7 @@ def homepage():
     printQueryResult(movies)
     movies =  [[str(y) for y in x] for x in movies]
 
-    global postNum
-    if os.path.exists("./post_count.txt"):
-        f=open("post_count.txt", "r+")
-        content = f.read()
-        print("postNum:", content)
-        if content == "":
-            postNum = 0
-        else:
-            postNum = int(content)
-    else:
-        f=open("post_count.txt", "w+")
-        postNum = 0
-    f.close()
+    
 
     return render_template('index.html', value='pig', movies_instance=movies)
 
@@ -68,28 +56,22 @@ def moviepage(keyword):
 def movieDetailPage(myImdbId):
     print("===in movie detail page")
     print("ImdbId", myImdbId)
-    global postNum
-    print("postNum", postNum)
+    
     print("session['username']", session['username'])
 
     try:
         form = RegistrationForm(request.form)
         if request.method == "POST":
             print("Pressed postButton")
-            postNum += 1
             movie = request.form['movie']
             review = request.form['review']
             rating = request.form['rating']
             c, conn = connection()
-            print(postNum, review, rating, myImdbId)
-            x = c.execute("INSERT INTO Post(postId, review, rating, ImdbId, movieTitle, Username) VALUES (%s, %s, %s, %s, %s, %s)", (postNum, review, rating, myImdbId, movie, session['username']))
+            print( review, rating, myImdbId)
+            x = c.execute("INSERT INTO Post( review, rating, ImdbId, movieTitle, Username) VALUES ( %s, %s, %s, %s, %s)", ( review, rating, myImdbId, movie, session['username']))
             conn.commit()
             if int(x)>0:
-                print("write", str(postNum))
-                f=open("post_count.txt", "w+")
-                f.seek(0)
-                f.truncate()
-                f.write(str(postNum))
+                print("INSERT POST SUCCESS")
             print("INSERT: number of affected rows",x)
 
     except Exception as e:
@@ -116,7 +98,7 @@ def movieDetailEditPage(ImdbId, postId):
             review = request.form['review']
             rating = request.form['rating']
             c, conn = connection()
-            print(postNum, review, rating, ImdbId)
+            print( review, rating, ImdbId)
             x = c.execute("UPDATE Post SET rating=%s, review=%s WHERE postId=%s", (rating, review, postId))
             conn.commit()
             print("UPDATE: number of affected rows",x)

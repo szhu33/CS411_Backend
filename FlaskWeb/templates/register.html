@@ -5,38 +5,21 @@
   <div class="card card-image" style="background-image: url(/static/img/m1.jpg);">
     <h4> Register</h4>
     <hr>
-
-    	<!--
-		<script type="text/javascript">
-		function google() {
-		window.location = "http://baidu.com";
-		}
-		</script>
-		-->
-
-		<form method="POST">
-			UserName:<br>
-			<input  name="movie" value="{{request.form.username}}">
-			<br>
-			Email:<br>
-			<input name="rating" value="{{request.form.email}}">
-			<br>
-			Password:<br>
-		    <input value="{{request.form.password}}">
-		    <br>
-			Password Confirm:<br>
-		    <input value="{{request.form.confirm}}">
-		    <br>
-		    <br>
+    {% from "_fromhelper.html" import render_field %}
+    <form method=post action="/register/">
+			<dl>
+				{{render_field(form.username)}}
+				{{render_field(form.email)}}
+				{{render_field(form.password)}}
+				{{render_field(form.confirm)}}
+				{{render_field(form.accept_tos)}}
+			</dl>
+			<p><input type=submit value=Register></p >
 		</form>
-			<a href="http://127.0.0.1:5000/user/" + {{request.form.username}}>
-			<button>
-				submit
-			</button>
-			</a> 
-			<br>
-			<br>
 
+		{% if error %}
+			<p class="error"><strong>Error:</strong>{{error}}</p >
+		{% endif %}
  </div>
   </body>
 {% endblock %}

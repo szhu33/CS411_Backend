@@ -180,10 +180,15 @@ def userProfilePage(username):
     user = result[0]
     email = user[1]
 
-    x = c.execute("SELECT * FROM Users WHERE Username = %s", username)
+    x = c.execute("SELECT * FROM Post WHERE Username = %s", username)
+    print("number of affected rows",x)
+    posts = c.fetchall()
+
+    #x = c.execute("SELECT * FROM Post WHERE Username = %s", username)
+    #print("number of affected rows",x)
+    #posts = c.fetchall()
+    return render_template('user.html', myUsername=username, myEmail=email, myPosts=posts) 
 	
-
-
 
 @app.route('/register/',methods = ["GET","POST"])
 def loginPage():

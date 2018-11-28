@@ -25,11 +25,6 @@ app.secret_key = b'\x9e\x02\xc2<W!A\xf8\xe2\x169:v\x97lC'
 
 @app.route('/')
 def homepage():
-    #postNum = 0
-    return "Hi there, how ya doin?"
-
-@app.route('/movie', methods = ["GET"])
-def moviepage():
     print("===in movie page")
     c, conn = connection()
     x = c.execute("SELECT * FROM Movie LIMIT 20")
@@ -40,6 +35,21 @@ def moviepage():
     movies =  [[str(y) for y in x] for x in movies]
 
     return render_template('index.html', value='pig', movies_instance=movies)
+
+@app.route('/search/<keyword>', methods = ["GET"])
+def moviepage(keyword):
+
+    print("===in movie page")
+    c, conn = connection()
+    x = c.execute("SELECT * FROM Movie LIMIT 20")
+    print("number of affected rows",x)
+    movies = c.fetchall()
+    for x in movies:
+        print(x)
+    movies =  [[str(y) for y in x] for x in movies]
+
+    return render_template('index.html', value='pig', movies_instance=movies)
+
 
 @app.route('/movie/<myImdbId>', methods = ["GET", "POST"])
 def movieDetailPage(myImdbId):
@@ -69,7 +79,7 @@ def movieDetailPage(myImdbId):
             rating = request.form['rating']
             c, conn = connection()
             print(postNum, review, rating, myImdbId)
-            x = c.execute("INSERT INTO Post(postId, review, rating, ImdbID, movieTitle) VALUES (%s, %s, %s, %s, %s)", (postNum, review, rating, myImdbId, movie))
+            x = c.execute("INSERT INTO Post(postId, review, rating, ImdbId, movieTitle) VALUES (%s, %s, %s, %s, %s)", (postNum, review, rating, myImdbId, movie))
             conn.commit()
             if int(x)>0:
                 print("write", str(postNum))
@@ -83,7 +93,7 @@ def movieDetailPage(myImdbId):
 
     f.close()
     c, conn = connection()
-    sql = "SELECT * FROM Movie WHERE ImdbID = %s"
+    sql = "SELECT * FROM Movie WHERE ImdbId = %s"
     x = c.execute(sql, myImdbId)
     print("SELECT: number of affected rows",x)
     movie = c.fetchall()

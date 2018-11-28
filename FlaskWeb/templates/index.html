@@ -163,68 +163,29 @@
 		//var img_list = new Array("team1.png", "team2.png", "team3.png", "team3.png");
 		//window.alert('pig pig');
 		//window.alert(movie_list[0][0]);
-		for(var i = 0; i < Math.floor(movie_list.length/4); i ++)
-			$('body').append(
-			'<div class="container-fluid padding">' +
-			'<div class="row padding">' +
-			'<div class="col-md-3">'+
-				'<div class="card">'+
-					'<a href="http://127.0.0.1:5000/movie/' + movie_list[4*i + 0][0]  + '">' +
-					'<img class="card-img-top movie_card" src=' + movie_list[4*i + 0][1]  + '>'+
-					'</a>' +
-					'<div class="card-body">' +
-						'<h4 class="card-title">' + movie_list[4*i + 0][2] + '(' + movie_list[4*i + 0][4] +')' + '</h4>'+
-						'<p class="card-text">' + movie_list[4*i + 0][6] + '</p>'+
-						'<a href="#" class="btn btn-outline-secondary">'+
-							'See Profile' +
-						'</a>' +
-					'</div>' +
-				'</div>	'+
-			'</div>' +
-			'<div class="col-md-3">'+
-				'<div class="card">'+
-					'<a href="http://127.0.0.1:5000/movie/' + movie_list[4*i + 1][0]  + '">' +
-					'<img class="card-img-top movie_card" src=' + movie_list[4*i + 1][1] + '>'+
-					'</a>' +
-					'<div class="card-body">' +
-						'<h4 class="card-title">' + movie_list[4*i + 1][2] + '(' + movie_list[4*i + 1][4] +')'+ '</h4>'+
-						'<p class="card-text">' + movie_list[4*i + 1][6] + '</p>'+
-						'<a href="#" class="btn btn-outline-secondary">'+
-							'See Profile' +
-						'</a>' +
-					'</div>' +
-				'</div>	'+
-			'</div>' +
-			'<div class="col-md-3">'+
-				'<div class="card">'+
-					'<a href="http://127.0.0.1:5000/movie/' + movie_list[4*i + 2][0]  + '">' +
-					'<img class="card-img-top movie_card"  src=' + movie_list[4*i + 2][1] + '>'+
-					'</a>' +
-					'<div class="card-body">' +
-						'<h4 class="card-title">' + movie_list[4*i + 2][2] + '(' + movie_list[4*i + 2][4] +')' +  '</h4>'+
-						'<p class="card-text">' + movie_list[4*i + 2][6]  + '</p>'+
-						'<a href="#" class="btn btn-outline-secondary">'+
-							'See Profile' +
-						'</a>' +
-					'</div>' +
-				'</div>	'+
-			'</div>' +
-			'<div class="col-md-3">'+
-				'<div class="card">'+
-					'<a href="http://127.0.0.1:5000/movie/' + movie_list[4*i + 2][0]  + '">' +
-					'<img class="card-img-top movie_card" src=' + movie_list[4*i + 3][1] + '>'+
-					'</a>' +
-					'<div class="card-body">' +
-						'<h4 class="card-title">' + movie_list[4*i + 3][2] + '(' + movie_list[4*i + 3][4] +')' + '</h4>'+
-						'<p class="card-text">' + movie_list[4*i + 3][6] + '</p>'+
-						'<a href="#" class="btn btn-outline-secondary">'+
-							'See Profile' +
-						'</a>' +
-					'</div>' +
-				'</div>	'+
-			'</div>' +
-			'</div>' +
-			'</div>');
+		for(var i = 0; i < Math.floor(movie_list.length/4) + 1; i ++)
+			$('body').append('<div class="container-fluid padding">' + 
+								'<div class="row padding">')
+			for(var j = 0; j < 4; j ++)
+				if(4 * i + j < movie_list.length)
+					$('body').append(
+					'<div class="col-md-3">'+
+						'<div class="card">'+
+							'<a href="http://127.0.0.1:5000/movie/' + movie_list[4*i + 0][0]  + '">' +
+							'<img class="card-img-top movie_card" src=' + movie_list[4*i + 0][1]  + '>'+
+							'</a>' +
+							'<div class="card-body">' +
+								'<h4 class="card-title">' + movie_list[4*i + 0][2] + '(' + movie_list[4*i + 0][4] +')' + '</h4>'+
+								'<p class="card-text">' + movie_list[4*i + 0][6] + '</p>'+
+								'<a href="#" class="btn btn-outline-secondary">'+
+									'See Profile' +
+								'</a>' +
+							'</div>' +
+						'</div>	'+
+					'</div>');
+
+			$('body').append('</div>' + 
+						'</div>')
 	</script>
 
 

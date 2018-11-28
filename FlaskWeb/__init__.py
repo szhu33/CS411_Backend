@@ -6,8 +6,9 @@ import os.path
 from pathlib import Path
 from flask import jsonify, redirect, url_for
 from pymysql import escape_string as thwart # escape SQL injection(security vulnerability )
-
+from flask_socketio import SocketIO, emit, join_room
 from wtforms import Form, BooleanField, TextField, PasswordField, validators
+from datatime import datetime
 
 def printQueryResult(arr):
 	for x in arr:
@@ -22,6 +23,38 @@ class RegistrationForm(Form):
 
 app = Flask(__name__)
 app.secret_key = b'\x9e\x02\xc2<W!A\xf8\xe2\x169:v\x97lC'
+socketio = SocketIO(app)
+
+@socketio.on('join')
+def join(message):
+    join_room(message['room'])
+    print('join')
+
+@socketio.on('connect')
+def test_connect(message):
+    print(session['username'], 'connected')
+
+@socketio.on('sendInquiry')
+def send_inquiry(msg):
+    createDate = datetime.now()
+	print("User", session['username'], "sent", msg, "at time", createDate)
+    c, conn = connection()
+	x = c.execute("INSERT INTO Message(Username, Message, CreateDate) VALUES (%s, %s, %s)", (session['username'], msg, createDate))
+    conn.commit()
+    if int(x)>0:
+        print("INSERT MESSAGE SUCCESS")
+    print("INSERT: number of affected rows",x)
+	data = {
+        'time': createDate.strftime('%H:%M'),
+        'Name': session['username'],
+        'msg': msg['msg']
+    }
+    emit('getInquiry',msg)
+
+@app.route('/chat')
+def chatPage():
+	return render_template('chat.html', username=session['username'])
+
 
 @app.route('/')
 def homepage():
@@ -32,8 +65,6 @@ def homepage():
     movies = c.fetchall()
     printQueryResult(movies)
     movies =  [[str(y) for y in x] for x in movies]
-
-    
 
     return render_template('index.html', value='pig', movies_instance=movies)
 
@@ -154,6 +185,7 @@ def postPage():
 
 @app.route('/user/<Username>', methods = ["GET", "POST"])
 def userProfilePage(username):
+    print("In User Profile Page")
     c, conn = connection()
     x = c.execute("SELECT * FROM Users WHERE Username = %s", username)
     print("number of affected rows",x)
@@ -225,7 +257,7 @@ def registerPage():
                 session['logged_in'] = True
                 session['username'] = username
 
-                return "User profile page to be implemented"
+                return redirect("127.0.0.1:5000/user/%s", username)
 
     except Exception as e:
         return str(e)

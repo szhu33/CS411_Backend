@@ -3,18 +3,16 @@
 {% block body %}
   <body class = "container">
   <div class="card card-image" style="background-image: url(/static/img/m1.jpg);">
-    <h4> Register</h4>
+    <h4> Login</h4>
     <hr>
     {% from "_fromhelper.html" import render_field %}
     <form method=post action="/register/">
 			<dl>
 				{{render_field(form.username)}}
-				{{render_field(form.email)}}
 				{{render_field(form.password)}}
-				{{render_field(form.confirm)}}
 				{{render_field(form.accept_tos)}}
 			</dl>
-			<p><input type=submit value=Register></p >
+			<p><input type=submit value=Login></p >
 		</form>
 
 		{% if error %}

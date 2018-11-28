@@ -34,6 +34,20 @@ def homepage():
         print(x)
     movies =  [[str(y) for y in x] for x in movies]
 
+    global postNum
+    if os.path.exists("./post_count.txt"):
+        f=open("post_count.txt", "r+")
+        content = f.read()
+        print("postNum:", content)
+        if content == "":
+            postNum = 0
+        else:
+            postNum = int(content)
+    else:
+        f=open("post_count.txt", "w+")
+        postNum = 0
+    f.close()
+
     return render_template('index.html', value='pig', movies_instance=movies)
 
 @app.route('/search/<keyword>', methods = ["GET"])
@@ -56,17 +70,6 @@ def movieDetailPage(myImdbId):
     print("===in movie detail page")
     print("ImdbId", myImdbId)
     global postNum
-    if os.path.exists("./post_count.txt"):
-        f=open("post_count.txt", "r+")
-        content = f.read()
-        print(content)
-        if content == "":
-            postNum = 0
-        else:
-            postNum = int(content)
-    else:
-        f=open("post_count.txt", "w+")
-        postNum = 0
     print("postNum", postNum)
 
     try:
@@ -83,6 +86,7 @@ def movieDetailPage(myImdbId):
             conn.commit()
             if int(x)>0:
                 print("write", str(postNum))
+                f=open("post_count.txt", "w+")
                 f.seek(0)
                 f.truncate()
                 f.write(str(postNum))
@@ -91,7 +95,6 @@ def movieDetailPage(myImdbId):
     except Exception as e:
         return str(e)
 
-    f.close()
     c, conn = connection()
     sql = "SELECT * FROM Movie WHERE ImdbId = %s"
     x = c.execute(sql, myImdbId)

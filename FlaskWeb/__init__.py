@@ -194,7 +194,7 @@ def postPage():
         return str(e)
 
     c, conn = connection()
-    x = c.execute("SELECT * FROM Post")
+    x = c.execute("SELECT * FROM Post INNER JOIN Movie On Post.ImdbId = Movie.ImdbId")
     post = c.fetchall()
     printQueryResult(post)
 
@@ -204,15 +204,10 @@ def postPage():
 def userProfilePage():
     try:
         print("===In User Profile Page")
-        print("current user,", session['username'])
-        c, conn = connection()
-        x = c.execute("SELECT * FROM Users WHERE Username = %s", session['username'])
-        user = c.fetchall()[0]
-        username = user[0]
-        email = user[1]
-        print(username, email)
 
-        x = c.execute("SELECT * FROM Post WHERE Username = %s", username)
+        c, conn = connection()
+        print("current user,", session['username'])
+        x = c.execute("SELECT * FROM Post INNER JOIN Movie On Post.ImdbId = Movie.ImdbId  WHERE Username = %s", session['username'])
 
         print("number of affected rows",x)
         posts = c.fetchall()
@@ -225,7 +220,7 @@ def userProfilePage():
     except Exception as e:
         return str(e)
 
-    return render_template('user.html', myUsername=username, myEmail=email, myPosts=posts)
+    return render_template('user.html', myUsername=session['username'], myPosts=posts)
 
 @app.route('/login/', methods = ["GET","POST"])
 def loginPage():

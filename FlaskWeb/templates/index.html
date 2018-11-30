@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Complete Bootstrap 4 Website Layout</title>
+	<title>Movie++</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
@@ -13,39 +13,39 @@
 </head>
 <body>
 
-<!-- Navigation -->
+
 <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
-<div class="container-fluid">
-	<!-- <a class="navbar-brand"><img src="/static/img/logo.png"></a> -->
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
-		<span class="navbar-toggler-icon"></span>
-	</button>
-	<div class="collapse navbar-collapse" id="navbarResponsive">
-		<ul class="navbar-nav ml-auto">
-			<li class="nav-item">
-				<a class="nav-link active" href="">Forums</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="http://127.0.0.1:5000/chat">CHAT</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="http://127.0.0.1:5000/post">POST</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="http://127.0.0.1:5000/login">LOGIN</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="http://127.0.0.1:5000/register">SIGNUP</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="http://127.0.0.1:5000/movie">MAIN</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#">SUPPORT</a>
-			</li>
-		</ul>
+	<div class="container-fluid">
+		<!-- <a class="navbar-brand"><img src="/static/img/logo.png"></a> -->
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarResponsive">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<a class="nav-link" href="http://127.0.0.1:5000">MOVIES</a>
+				</li>
+		    {% if not session.logged_in %}
+					<li class="nav-item">
+						<a class="nav-link" href="http://127.0.0.1:5000/login">LOGIN</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="http://127.0.0.1:5000/register">SIGNUP</a>
+					</li>
+		    {% else %}
+					<li class="nav-item">
+						<a class="nav-link" href="http://127.0.0.1:5000/user/session['username']">Profile</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link active" href="http://127.0.0.1:5000/chat">CHATTING</a>
+					</li>
+		    {% endif %}
+				<li class="nav-item">
+					<a class="nav-link" href="http://127.0.0.1:5000/post">POST</a>
+				</li>
+			</ul>
+		</div>
 	</div>
-</div>
 </nav>
 
 <!--- Image Slider -->
@@ -167,7 +167,7 @@
 		//window.alert('pig pig');
 		//window.alert(movie_list[0][0]);
 		for(var i = 0; i < Math.floor(movie_list.length/4) + 1; i ++)
-			$('body').append('<div class="container-fluid padding">' + 
+			$('body').append('<div class="container-fluid padding">' +
 								'<div class="row padding">')
 			for(var j = 0; j < 4; j ++)
 				if(4 * i + j < movie_list.length)
@@ -187,7 +187,7 @@
 						'</div>	'+
 					'</div>');
 
-			$('body').append('</div>' + 
+			$('body').append('</div>' +
 						'</div>')
 	</script>
 
@@ -226,37 +226,34 @@
 	<div class="container-fluid padding">
 	<div class="row text-center">
 		<div class="col-md-3">
-			<button type="button" class = "btn btn-outline-primary btn-lg"> JOIN THE COMMUNITY</button>
+			<button type="button" class = "btn btn-outline-primary btn-lg"> UIUC CS411 TEAM++</button>
+			<hr class="light">
+			<p>This is a final project for CS411 in UIUC.</p>
+			<p>Our team(team++) consists of three people.</p>
+		</div>
+		<div class="col-md-3">
+			<hr class="light">
+			<h5>Xinwei He</h5>
 			<hr class="light">
 			<p>555-555-5555</p>
-			<p>email@fuckyou.com</p>
+			<p href="xinh@illinoi.edu">xinh@illinoi.edu</p>
+			<p href="https://www.linkedin.com/in/qishan--zhu/?locale=en_US">Linedin: Xinwei He</p>
+			<p>Facebook</p>
 		</div>
 		<div class="col-md-3">
 			<hr class="light">
-			<h5>THE BASICS</h5>
+			<h5>Yihan Wang</h5>
 			<hr class="light">
-			<p>Contact Us</p>
-			<p>Support Forum</p>
-			<p>API</p>
-			<p>Blog</p>
-			<p>About Us</p>
+			<p>yihanw@illinois.edu</p>
+			<p href="https://www.linkedin.com/in/qishan--zhu/?locale=en_US">Linedin: Yihan Wang</p>
+			<p>Facebook</p>
 		</div>
 		<div class="col-md-3">
 			<hr class="light">
-			<h5>GET INVOLVED</h5>
+			<h5>Qishan Zhu</h5>
 			<hr class="light">
-			<p>3rd Party Application</p>
-			<p>Add New Movies</p>
-			<p>Add New TV Show</p>
-			<p>Contribution</p>
-		</div>
-		<div class="col-md-3">
-			<hr class="light">
-			<h5>COMMUNITY</h5>
-			<hr class="light">
-			<p>Guidlines</p>
-			<p>Leaderboard</p>
-			<p>Forums</p>
+			<p>qishanz2@illinois.edu</p>
+			<p href="https://www.linkedin.com/in/qishan--zhu/?locale=en_US">Linedin: Qishan Zhu</p>
 			<p>Twitter</p>
 			<p>Facebook</p>
 		</div>
@@ -268,7 +265,6 @@
     <!-- Content -->
 </div>
 <!-- Card -->
-
 
 
 </body>

@@ -25,18 +25,14 @@ app = Flask(__name__)
 app.secret_key = b'\x9e\x02\xc2<W!A\xf8\xe2\x169:v\x97lC'
 socketio = SocketIO(app)
 
-def messageReceived(methods=['GET', 'POST']):
-    print('message was received!!!')
-
-
-@socketio.on('my event')
-def handle_my_custom_event(json, methods=['GET', 'POST']):
-    print('received my event: ' + str(json))
-    socketio.emit('my response', json, callback=messageReceived)
+@socketio.on('onEvent')
+def eventHandler(json, methods=['GET', 'POST']):
+    print(str(json))
+    socketio.emit('my response', json)
 
 @app.route('/chat')
 def chatPage():
-	return render_template('chat.html', username=session['username'])
+	return render_template('chat.html', myUsername=session['username'])
 
 
 @app.route('/', methods = ["GET"])
@@ -183,7 +179,7 @@ def userProfilePage():
         print(username, email)
 
         x = c.execute("SELECT * FROM Post WHERE Username = %s", username)
-		
+
         print("number of affected rows",x)
         posts = c.fetchall()
         if int(len(posts)) > 0:
@@ -197,7 +193,7 @@ def userProfilePage():
 
     return render_template('user.html', myUsername=username, myEmail=email, myPosts=posts)
 
-@app.route('/login', methods = ["GET","POST"])
+@app.route('/login/', methods = ["GET","POST"])
 def loginPage():
     print("===In login page")
     error = ""
@@ -226,7 +222,7 @@ def loginPage():
 
     return render_template("login.html", form=form, error=error)
 
-@app.route('/register',methods = ["GET","POST"])
+@app.route('/register/',methods = ["GET","POST"])
 def registerPage():
     print("===In register page")
     error = ""

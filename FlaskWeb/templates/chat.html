@@ -1,80 +1,13 @@
-<!DOCTYPE html>
-  <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Movie++</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-  <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
-  <link href="/static/style.css" rel="stylesheet">
-</head>
+{% extends "base.html" %}
 
-<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
-  <div class="container-fluid">
-    <!-- <a class="navbar-brand"><img src="/static/img/logo.png"></a> -->
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarResponsive">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="http://127.0.0.1:5000">MOVIES</a>
-        </li>
+{% block body %}
 
-        <li class="nav-item">
-          <a class="nav-link" href="http://127.0.0.1:5000/explore">EXPLORE</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="http://127.0.0.1:5000/post">POST</a>
-        </li>
-
-        {% if not session.logged_in %}
-          <li class="nav-item">
-            <a class="nav-link" href="http://127.0.0.1:5000/login">LOGIN</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="http://127.0.0.1:5000/register">SIGNUP</a>
-          </li>
-        {% else %}
-          <li class="nav-item">
-            <a class="nav-link" href="http://127.0.0.1:5000/user">Profile</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="http://127.0.0.1:5000/chat">CHATTING</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link active" href="http://127.0.0.1:5000/logout">LOGOUT</a>
-          </li>
-        {% endif %}
-
-      </ul>
-    </div>
-  </div>
-</nav>
-
-
-<!--- Jumbotron -->
-<div class="container-fluid">
-<div class="row jumbotron">
-  <div class="col-xs-12 col-sm-12 col-md-9 col-xl-10">
-    <h1 class="lead">CHATTING ROOM
-    </h1>
-  </div>
-  <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-10">
-      <button type="button" class="btn btn-outline-secondary bnt-lg">
-        You can chat with any movie lover here!
-      </button>
-
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">Chatting</h1>
+    <p class="lead">You can chat with any movie lover here!</p>
   </div>
 </div>
-</div>
-
-
-
 
     <form action="" method="POST">
 
@@ -123,9 +56,10 @@
             '<div><b style="color: #000">'+msg.user_name+'</b> '+msg.message+'</div>'
             )
           */if(cnt % 4 == 0){
+              var num = Math.floor(Math.random() * (13 - 1)) + 1;
               $( 'div.message_holder' ).append(
                       '<div class="col-md-12 post_instance">' +
-                        '<img src="/static/img/' + 'ano.jpg' + '" class="img-rounded">'+
+                        '<img src="/static/img/pro' + num+'.png' + '" class="img-rounded" style="width: 5rem;">'+
                         '<form method="POST">'+
                         '<div> <strong>User Name</strong> :' + msg.username + '</div>'+
                         '<div> <strong>User Message</strong> : ' + msg.message + '</div>'+
@@ -134,10 +68,11 @@
               )
             }
 
+            num = Math.floor(Math.random() * (13 - 1)) + 1;
             if(cnt % 4 == 1){
               $( 'div.message_holder' ).append(
                       '<div class="col-md-12 post_instance">' +
-                        '<img src="/static/img/' + 'pic1.jpeg' + '" class="img-rounded">'+
+                        '<img src="/static/img/pro' + num+'.png' + '" class="img-rounded">'+
                         '<form method="POST">'+
                         '<div> <strong>User Name</strong> :' + msg.username + '</div>'+
                         '<div> <strong>User Message</strong> : ' + msg.message + '</div>'+
@@ -146,11 +81,11 @@
               )
             }
 
-
+            num = Math.floor(Math.random() * (13 - 1)) + 1;
             if(cnt % 4 == 2){
               $( 'div.message_holder' ).append(
                       '<div class="col-md-12 post_instance">' +
-                        '<img src="/static/img/' + 'pic2.jpeg' + '" class="img-rounded">'+
+                        '<img src="/static/img/pro' + num+'.png' + '" class="img-rounded">'+
                         '<form method="POST">'+
                         '<div> <strong>User Name</strong> :' + msg.username + '</div>'+
                         '<div> <strong>User Message</strong> : ' + msg.message + '</div>'+
@@ -159,10 +94,11 @@
               )
             }
 
+            num = Math.floor(Math.random() * (13 - 1)) + 1;
             if(cnt % 4 == 3){
               $( 'div.message_holder' ).append(
                       '<div class="col-md-12 post_instance">' +
-                        '<img src="/static/img/' + 'pic3.jpeg' + '" class="img-rounded">'+
+                        '<img src="/static/img/pro' + num+'.png' + '" class="img-rounded">'+
                         '<form method="POST">'+
                         '<div> <strong>User Name</strong> :' + msg.username + '</div>'+
                         '<div> <strong>User Message</strong> : ' + msg.message + '</div>'+
@@ -177,55 +113,4 @@
     </script>
   </div>
 
-
-<div class="card card-image" style="background-image: url(/static/img/m1.jpg);">
-
-    <!-- Content -->
-  <div class="container-fluid padding">
-  <div class="row text-center">
-    <div class="col-md-3">
-      <button type="button" class = "btn btn-outline-primary btn-lg"> UIUC CS411 TEAM++</button>
-      <hr class="light">
-      <p>This is a final project for CS411 in UIUC.</p>
-      <p>Our team(team++) consists of three people.</p>
-    </div>
-    <div class="col-md-3">
-      <hr class="light">
-      <h5>Xinwei He</h5>
-      <hr class="light">
-      <p>555-555-5555</p>
-      <p href="xinh@illinoi.edu">xinh@illinoi.edu</p>
-      <p href="https://www.linkedin.com/in/qishan--zhu/?locale=en_US">Linedin: Xinwei He</p>
-      <p>Facebook</p>
-    </div>
-    <div class="col-md-3">
-      <hr class="light">
-      <h5>Yihan Wang</h5>
-      <hr class="light">
-      <p>yihanw@illinois.edu</p>
-      <p href="https://www.linkedin.com/in/qishan--zhu/?locale=en_US">Linedin: Yihan Wang</p>
-      <p>Facebook</p>
-    </div>
-    <div class="col-md-3">
-      <hr class="light">
-      <h5>Qishan Zhu</h5>
-      <hr class="light">
-      <p>qishanz2@illinois.edu</p>
-      <p href="https://www.linkedin.com/in/qishan--zhu/?locale=en_US">Linedin: Qishan Zhu</p>
-      <p>Twitter</p>
-      <p>Facebook</p>
-    </div>
-    <div class="col-md-12">
-      <hr class="light">
-      <h5>movie-search.com</h5>
-    </div>
-  </div>
-    <!-- Content -->
-</div>
-
-
-
-
-
-  </body>
-</html>
+{% endblock %}

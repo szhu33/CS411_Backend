@@ -151,7 +151,7 @@ def movieDetailEditPage(ImdbId, postId):
 
 @app.route('/post', methods = ["GET", "POST"])
 def postPage():
-    print("===in post page")
+    print("===In post page")
     try:
         form = RegistrationForm(request.form)
         if request.method == "POST":
@@ -189,33 +189,30 @@ def postPage():
 
 @app.route('/user/<username>', methods = ["GET", "POST"])
 def userProfilePage(username):
-    print("In User Profile Page")
+    print("===In User Profile Page")
     c, conn = connection()
     x = c.execute("SELECT * FROM Users WHERE Username = %s", username)
     print("number of affected rows",x)
     result = c.fetchall()
-    printQueryResult(user)
+    printQueryResult(result)
     user = result[0]
-    email = user[1]
+    print(user[0], user[1])
 
     x = c.execute("SELECT * FROM Post WHERE Username = %s", username)
     print("number of affected rows",x)
     posts = c.fetchall()
+    printQueryResult(posts)
 
-    #x = c.execute("SELECT * FROM Post WHERE Username = %s", username)
-    #print("number of affected rows",x)
-    #posts = c.fetchall()
-    return render_template('user.html', myUsername=username, myEmail=email, myPosts=posts) 
+    return render_template('user.html', myUsername=user[0], myEmail=user[1], myPosts=posts) 
 	
 @app.route('/login/',methods = ["GET","POST"])
 def loginPage():
-    print("===in login page")
+    print("===In login page")
     form = RegistrationForm(request.form) # fill in html with form
     if request.method == "POST" and form.validate():
-
+        print("request method == post")
         username = form.username.data
-        #email = form.email.data
-        #password = sha256_crypt.encrypt(str(form.password.data))
+        password = sha256_crypt.encrypt(str(form.password.data))
         print(username, password)
         c, conn = connection()
         x = c.execute("SELECT * FROM Users WHERE Username = (%s)", (thwart(username)))
@@ -224,20 +221,24 @@ def loginPage():
 			# set session for this new user
             session['logged_in'] = True
             session['username'] = username
-            return render_template('register.html', form = form)
+            return redirect('http://127.0.0.1:5000/user/{}'.format(username), code=302)
         else:
+            print("Please register first!")
             flash("Please register first!")
 
     return render_template("login.html", form=form)
 
 @app.route('/register/',methods = ["GET","POST"])
 def registerPage():
-    print("===in register page")
+    print("===In register page")
     try:
         form = RegistrationForm(request.form) # fill in html with form
         if request.method == "POST" and form.validate():
-
+            print("request method == post")
             username = form.username.data
+            if len(username) < 4:
+                alert("Please enter a username more than 3 letters!")
+                return render_template('register.html', form = form)
             email = form.email.data
             password = sha256_crypt.encrypt(str(form.password.data))
             print(username, email, password)

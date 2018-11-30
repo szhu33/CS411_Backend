@@ -42,7 +42,7 @@ def chatPage():
 @app.route('/', methods = ["GET"])
 def homepage():
     print("===in movie page")
-    print("current user:", session['username'])
+    #print("current user:", session['username'])
     c, conn = connection()
     x = c.execute("SELECT * FROM Movie LIMIT 20")
     print("number of affected rows",x)
@@ -170,25 +170,34 @@ def postPage():
 
     return render_template('post.html', form=form, posts=post)
 
-@app.route('/user/', methods = ["GET", "POST"])
+@app.route('/user', methods = ["GET"])
 def userProfilePage():
-    print("===In User Profile Page")
-    print("current user,", session['username'])
-    c, conn = connection()
-    x = c.execute("SELECT * FROM Users WHERE Username = %s", session['username'])
-    user = c.fetchall()[0]
-    username = user[0]
-    email = user[1]
-    print(username, email)
+    try:
+        print("===In User Profile Page")
+        print("current user,", session['username'])
+        c, conn = connection()
+        x = c.execute("SELECT * FROM Users WHERE Username = %s", session['username'])
+        user = c.fetchall()[0]
+        username = user[0]
+        email = user[1]
+        print(username, email)
 
-    x = c.execute("SELECT * FROM Post WHERE Username = %s", username)
-    print("number of affected rows",x)
-    posts = c.fetchall()
-    printQueryResult(posts)
+        x = c.execute("SELECT * FROM Post WHERE Username = %s", username)
+		
+        print("number of affected rows",x)
+        posts = c.fetchall()
+        if int(len(posts)) > 0:
+            printQueryResult(posts)
+        else:
+            posts = []
+        print("NO posts:", posts)
 
-    return render_template('user_template.html', myUsername=session['username'], myEmail=email, myPosts=posts)
+    except Exception as e:
+        return str(e)
 
-@app.route('/login/',methods = ["GET","POST"])
+    return render_template('user.html', myUsername=username, myEmail=email, myPosts=posts)
+
+@app.route('/login', methods = ["GET","POST"])
 def loginPage():
     print("===In login page")
     error = ""
@@ -208,7 +217,8 @@ def loginPage():
         if sha256_crypt.verify(form.password.data, user[2]):
             session['logged_in'] = True
             session['username'] = username
-            return redirect('http://127.0.0.1:5000/user', code=302)
+            return redirect('http://127.0.0.1:5000', code=302)
+            #return render_template("user.html", form=form, error=error)
 
         else:
             error = "Invalid username or password!"
@@ -216,7 +226,7 @@ def loginPage():
 
     return render_template("login.html", form=form, error=error)
 
-@app.route('/register/',methods = ["GET","POST"])
+@app.route('/register',methods = ["GET","POST"])
 def registerPage():
     print("===In register page")
     error = ""
@@ -257,7 +267,7 @@ def registerPage():
                 session['logged_in'] = True
                 session['username'] = username
 
-                return redirect('http://127.0.0.1:5000/user', code=302)
+                return redirect('http://127.0.0.1:5000', code=302)
 
     except Exception as e:
         return str(e)

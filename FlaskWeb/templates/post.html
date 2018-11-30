@@ -2,24 +2,13 @@
 
 {% block body %}
 <!--- Jumbotron -->
-<div class="container-fluid">
-<div class="row jumbotron">
-	<div class="col-xs-12 col-sm-12 col-md-9 col-xl-10">
-		<p class="lead">A Collection of recent heated Movies!
-		</p>
-	</div>
-	<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-10">
-		<a href="#">
-			<button type="button" class="btn btn-outline-secondary bnt-lg">
-				Moive Posting
-			</button>
 
-		</a>
-	</div>
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">Posts</h1>
+    <p class="lead">See what other movie-lovers say!</p>
+  </div>
 </div>
-</div>
-
-
 
 
 	<div class="container-fluid padding">
@@ -48,37 +37,42 @@
 						<hr/>
 
 						-->
+
 						<script>
 							function myFunc(vars) {
 					    		return vars
 							}
 							var posts_list =  myFunc({{posts|tojson}});
 							//window.alert()
-							for(var i = 0; i < posts_list.length; i ++)
+							for(var i = 0; i < posts_list.length; i ++){
+								var num = Math.floor(Math.random() * (13 - 1)) + 1;
+								console.log(num);
 								$('body').append(
-									'<div class="col-md-12 post_instance">' +
-										'<img src="/static/img/ano.jpg" class="img-rounded">'+
-										'<div> <strong>Anonymous</strong></div>'+
+									'<div align="center">'+
+									'<div class="card" style="width: 25rem;">' +
+										'<img src="/static/img/pro'+num+'.png" class="card-img-top" alt="Card image cap">'+
+										'<div class="card-body">'+
+										'<h5 class="card-title">'+ posts_list[i][5]+'</h5>'+
+										'<h6 class="card-subtitle mb-2 text-muted"> Review on '+ posts_list[i][4] +'</h6>'+
+										'</div>'+
+										'<ul class="list-group list-group-flush">'+
+										'<li class="list-group-item"> Rating: ' + posts_list[i][2] + '/10</li>'+
+										'<li class="list-group-item">' + posts_list[i][1] + '</li>'+
+										'</ul>'+
+										'<div class="card-body">'+
 										'<form method="POST">'+
-											'Delete'+
 											'<input type="hidden" name="postId" value=' + posts_list[i][0]+ '>'+
 												'<input type="hidden" name="rating" value=' + posts_list[i][2]+ '>'+
 											'<input type="hidden" name="review" value=' + posts_list[i][1]+ '>'+
 											'<input type="hidden" name="ImdbId" value=' + posts_list[i][3]+ '>'+
-										    '<input type="submit" name="submitButton" value="Delete">'+
-										    '<br>'+
-											'Edit'+
-											'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
-										    '<input type="submit" name="submitButton" value="Edit">'+
+												'<input type="submit" name="submitButton" value="Delete">'+
+												'<input type="submit" name="submitButton" value="Edit">'+
 										'</form>' +
-										'<div> <strong>Movie Name</strong> :' + posts_list[i][4] + '</div>'+
-										'<div> <strong>Rating</strong> : ' + posts_list[i][2] + '</div>'+
-										'<div> <strong>Comment</strong> : ' + posts_list[i][1] + '</div>'+
-									'</div>'+
-									'<br>');
+										'</div>'+
+										'</div>');
+							}
+
 						</script>
-
-
 						<hr/>
 				</div>
 			</div>

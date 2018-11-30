@@ -2,19 +2,13 @@
 
 {% block body %}
 
-	<div class="container-fluid padding">
-	<div class="row padding ">
-		<div class="col-lg-6">
-			<div class="rating-block">
-				<h5>User Name</h5>
-				<p> {{myUsername}} </p>
-				<h5>User Email</h5>
-				<p> {{myEmail}} </p>
-			</div>
-		</div>
-
-	</div>
-	</div>
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">Hi, {{myUsername}}!</h1>
+		<h3 class="display-7">{{myEmail}}</h3>
+    <p class="lead">Here is the movies you watched and what you posted!</p>
+  </div>
+</div>
 
 	<div class="container-fluid padding">
 		<div class="row padding">
@@ -25,28 +19,34 @@
 					    		return vars
 							}
 							var posts_list =  myFunc({{myPosts|tojson}});
+							var num = Math.floor(Math.random() * (13 - 1)) + 1;
 							//window.alert()
-							for(var i = 0; i < posts_list.length; i ++)
+							for(var i = 0; i < posts_list.length; i ++){
+								console.log(num);
 								$('body').append(
-									'<div class="col-md-12 post_instance">' +
-										'<img src="/static/img/ano.jpg" class="img-rounded">'+
-										'<div> <strong>Anonymous</strong></div>'+
+									'<div align="center">'+
+									'<div class="card" style="width: 25rem;">' +
+										'<img src="/static/img/pro'+num+'.png" class="card-img-top" alt="Card image cap">'+
+										'<div class="card-body">'+
+										'<h5 class="card-title">'+ posts_list[i][5]+'</h5>'+
+										'<h6 class="card-subtitle mb-2 text-muted"> Review on '+ posts_list[i][4] +'</h6>'+
+										'</div>'+
+										'<ul class="list-group list-group-flush">'+
+										'<li class="list-group-item"> Rating: ' + posts_list[i][2] + '/10</li>'+
+										'<li class="list-group-item">' + posts_list[i][1] + '</li>'+
+										'</ul>'+
+										'<div class="card-body">'+
 										'<form method="POST">'+
-											'Delete'+
+											'<input type="hidden" name="postId" value=' + posts_list[i][0]+ '>'+
 												'<input type="hidden" name="rating" value=' + posts_list[i][2]+ '>'+
 											'<input type="hidden" name="review" value=' + posts_list[i][1]+ '>'+
-											'<input type="hidden" name="ImbdId" value=' + posts_list[i][3]+ '>'+
-										    '<input type="submit" name="submitButton" value="Delete">'+
-										    '<br>'+
-											'Edit'+
-											'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
-										    '<input type="submit" name="submitButton" value="Edit">'+
+											'<input type="hidden" name="ImdbId" value=' + posts_list[i][3]+ '>'+
+												'<input type="submit" name="submitButton" value="Delete">'+
+												'<input type="submit" name="submitButton" value="Edit">'+
 										'</form>' +
-										'<div> <strong>Movie Name</strong> :' + posts_list[i][4] + '</div>'+
-										'<div> <strong>Rating</strong> : ' + posts_list[i][2] + '</div>'+
-										'<div> <strong>Comment</strong> : ' + posts_list[i][1] + '</div>'+
-									'</div>'+
-									'<br>');
+										'</div>'+
+										'</div>');
+							}
 						</script>
 
 

@@ -73,11 +73,10 @@ def searchpage():
     print("===in search page")
     c, conn = connection()
     keyword = request.args.get('keyword')
-    likeString = "'%" + keyword + "%'"
-    print(likeString)
     searchsql = "SELECT * FROM Movie WHERE title LIKE %s"
     print(searchsql)
-    x = c.execute(searchsql, likeString)
+    print("%" + keyword + "%")
+    x = c.execute(searchsql, ("%" + keyword + "%",))
     print("number of affected rows",x)
     movies = c.fetchall()
     for x in movies:
@@ -91,7 +90,7 @@ def searchpage():
 def movieDetailPage(myImdbId):
     print("===in movie detail page")
     print("ImdbId", myImdbId)
-    
+
     print("session['username']", session['username'])
 
     try:
@@ -205,8 +204,8 @@ def userProfilePage(username):
     #x = c.execute("SELECT * FROM Post WHERE Username = %s", username)
     #print("number of affected rows",x)
     #posts = c.fetchall()
-    return render_template('user.html', myUsername=username, myEmail=email, myPosts=posts) 
-	
+    return render_template('user.html', myUsername=username, myEmail=email, myPosts=posts)
+
 @app.route('/login/',methods = ["GET","POST"])
 def loginPage():
     print("===in login page")
@@ -264,6 +263,13 @@ def registerPage():
 
     except Exception as e:
         return str(e)
+
+    return render_template("register.html", form=form)
+
+@app.route('/explore',methods = ["GET","POST"])
+def explorePage():
+    print("===in explore page")
+    keyword = request.args.get('keyword')
 
     return render_template("register.html", form=form)
 

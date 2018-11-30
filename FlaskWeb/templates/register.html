@@ -1,7 +1,6 @@
-{% extends "header.html" %}
+{% extends "base.html" %}
 
 {% block body %}
-  <body class = "container">
   <div class="card card-image" style="background-image: url(/static/img/m1.jpg);">
     <h4> Register</h4>
     <hr>
@@ -21,5 +20,4 @@
 			<p class="error" style="color: red"><strong></strong>{{error}}</p >
 		{% endif %}
  </div>
-  </body>
 {% endblock %}

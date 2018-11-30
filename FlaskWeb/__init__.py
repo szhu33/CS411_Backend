@@ -25,32 +25,17 @@ app = Flask(__name__)
 app.secret_key = b'\x9e\x02\xc2<W!A\xf8\xe2\x169:v\x97lC'
 socketio = SocketIO(app)
 
-@socketio.on('join')
-def join(message):
-    join_room(message['room'])
-    print('join')
-    send("User", )
 
-@socketio.on('connect')
-def test_connect(message):
-    print(session['username'], 'connected')
 
-@socketio.on('sendInquiry')
-def send_inquiry(msg):
-    createDate = datetime.now()
-    print("User", session['username'], "sent", msg, "at time", createDate)
-    c, conn = connection()
-    x = c.execute("INSERT INTO Message(Username, Message, CreateDate) VALUES (%s, %s, %s)", (session['username'], msg, createDate))
-    conn.commit()
-    if int(x)>0:
-        print("INSERT MESSAGE SUCCESS")
-    print("INSERT: number of affected rows",x)
-    data = {
-        'time': createDate.strftime('%H:%M'),
-        'Name': session['username'],
-        'msg': msg['msg']
-    }
-    emit('getInquiry', data, room=msg['room'])
+def messageReceived(methods=['GET', 'POST']):
+    print('message was received!!!')
+
+
+@socketio.on('my event')
+def handle_my_custom_event(json, methods=['GET', 'POST']):
+    print('received my event: ' + str(json))
+socketio.emit('my response', json, callback=messageReceived)
+
 
 @app.route('/chat')
 def chatPage():
@@ -211,10 +196,7 @@ def loginPage():
     error = ""
     form = RegistrationForm(request.form) # fill in html with form
     if request.method == "POST":
-<<<<<<< HEAD
         print("request method == post")
-=======
->>>>>>> b224973b395e1073f529f96c71ac872a7d4ebac2
         username = form.username.data
         c, conn = connection()
         x = c.execute("SELECT * FROM Users WHERE Username = (%s)", (thwart(username)))
@@ -239,6 +221,7 @@ def loginPage():
 def registerPage():
     print("===In register page")
     error = ""
+    form = RegistrationForm(request.form) # fill in html with form
     try:
         if request.method == "POST":
             print("request method == post")
@@ -291,4 +274,4 @@ def explorePage():
     return render_template("register.html", form=form)
 
 if __name__ == "__main__":
-    socketio.run(app)
+    socketio.run(app, debug=True)

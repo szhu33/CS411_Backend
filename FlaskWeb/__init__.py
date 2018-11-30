@@ -42,7 +42,7 @@ def chatPage():
 @app.route('/', methods = ["GET"])
 def homepage():
     print("===in movie page")
-    print("current user:", session['username'])
+    #print("current user:", session['username'])
     c, conn = connection()
     x = c.execute("SELECT * FROM Movie LIMIT 20")
     print("number of affected rows",x)
@@ -50,7 +50,7 @@ def homepage():
     printQueryResult(movies)
     movies =  [[str(y) for y in x] for x in movies]
 
-    return render_template('index.html', value='pig', movies_instance=movies, myUsername=session['username'])
+    return render_template('index.html', value='pig', movies_instance=movies)
 
 @app.route('/search', methods = ["GET"])
 def searchpage():
@@ -170,26 +170,34 @@ def postPage():
 
     return render_template('post.html', form=form, posts=post)
 
-@app.route('/user/<username>', methods = ["GET", "POST"])
-def userProfilePage(username):
-    print("===In User Profile Page")
-    print("current user,", session['username'])
-    c, conn = connection()
-    x = c.execute("SELECT * FROM Users WHERE Username = %s", session['username'])
-    user = c.fetchall()[0]
-    username = user[0]
-    email = user[1]
-    print(username, email)
+@app.route('/user', methods = ["GET"])
+def userProfilePage():
+    try:
+        print("===In User Profile Page")
+        print("current user,", session['username'])
+        c, conn = connection()
+        x = c.execute("SELECT * FROM Users WHERE Username = %s", session['username'])
+        user = c.fetchall()[0]
+        username = user[0]
+        email = user[1]
+        print(username, email)
 
-    x = c.execute("SELECT * FROM Post WHERE Username = %s", username)
-    print("number of affected rows",x)
-    posts = c.fetchall()
-    printQueryResult(posts)
+        x = c.execute("SELECT * FROM Post WHERE Username = %s", username)
+		
+        print("number of affected rows",x)
+        posts = c.fetchall()
+        if int(len(posts)) > 0:
+            printQueryResult(posts)
+        else:
+            posts = []
+        print("NO posts:", posts)
+
+    except Exception as e:
+        return str(e)
 
     return render_template('user.html', myUsername=username, myEmail=email, myPosts=posts)
-    #return redirect('http://127.0.0.1:5000/user/{}'.format(user[0]), code=302)
 
-@app.route('/login/',methods = ["GET","POST"])
+@app.route('/login', methods = ["GET","POST"])
 def loginPage():
     print("===In login page")
     error = ""
@@ -209,7 +217,8 @@ def loginPage():
         if sha256_crypt.verify(form.password.data, user[2]):
             session['logged_in'] = True
             session['username'] = username
-            return redirect('http://127.0.0.1:5000/user/{}'.format(username), code=302)
+            return redirect('http://127.0.0.1:5000', code=302)
+            #return render_template("user.html", form=form, error=error)
 
         else:
             error = "Invalid username or password!"
@@ -217,7 +226,7 @@ def loginPage():
 
     return render_template("login.html", form=form, error=error)
 
-@app.route('/register/',methods = ["GET","POST"])
+@app.route('/register',methods = ["GET","POST"])
 def registerPage():
     print("===In register page")
     error = ""
@@ -226,6 +235,8 @@ def registerPage():
         if request.method == "POST":
             print("request method == post")
             username = form.username.data
+            email = form.email.data
+            password = sha256_crypt.encrypt(str(form.password.data))
             if len(username) < 4:
                 error = "Please enter a username more than 3 letters!"
                 print("Please enter a username more than 3 letters!")
@@ -236,8 +247,6 @@ def registerPage():
                 print("Please enter a email more than 6 characters!")
                 return render_template('register.html', form=form, error=error)
 
-            email = form.email.data
-            password = sha256_crypt.encrypt(str(form.password.data))
             print(username, email, password)
             c, conn = connection()
             x = c.execute("SELECT * FROM Users WHERE Username = (%s)", (thwart(username)))
@@ -258,7 +267,7 @@ def registerPage():
                 session['logged_in'] = True
                 session['username'] = username
 
-                return redirect('http://127.0.0.1:5000/user/{}'.format(username), code=302)
+                return redirect('http://127.0.0.1:5000', code=302)
 
     except Exception as e:
         return str(e)

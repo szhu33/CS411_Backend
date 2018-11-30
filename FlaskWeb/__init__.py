@@ -50,7 +50,7 @@ def homepage():
     printQueryResult(movies)
     movies =  [[str(y) for y in x] for x in movies]
 
-    return render_template('index.html', value='pig', movies_instance=movies, myUsername=session['username'])
+    return render_template('index.html', value='pig', movies_instance=movies)
 
 @app.route('/search', methods = ["GET"])
 def searchpage():
@@ -170,8 +170,8 @@ def postPage():
 
     return render_template('post.html', form=form, posts=post)
 
-@app.route('/user/<username>', methods = ["GET", "POST"])
-def userProfilePage(username):
+@app.route('/user/', methods = ["GET", "POST"])
+def userProfilePage():
     print("===In User Profile Page")
     print("current user,", session['username'])
     c, conn = connection()
@@ -186,8 +186,7 @@ def userProfilePage(username):
     posts = c.fetchall()
     printQueryResult(posts)
 
-    return render_template('user.html', myUsername=username, myEmail=email, myPosts=posts)
-    #return redirect('http://127.0.0.1:5000/user/{}'.format(user[0]), code=302)
+    return render_template('user_template.html', myUsername=session['username'], myEmail=email, myPosts=posts)
 
 @app.route('/login/',methods = ["GET","POST"])
 def loginPage():
@@ -209,7 +208,7 @@ def loginPage():
         if sha256_crypt.verify(form.password.data, user[2]):
             session['logged_in'] = True
             session['username'] = username
-            return redirect('http://127.0.0.1:5000/user/{}'.format(username), code=302)
+            return redirect('http://127.0.0.1:5000/user', code=302)
 
         else:
             error = "Invalid username or password!"
@@ -226,6 +225,8 @@ def registerPage():
         if request.method == "POST":
             print("request method == post")
             username = form.username.data
+            email = form.email.data
+            password = sha256_crypt.encrypt(str(form.password.data))
             if len(username) < 4:
                 error = "Please enter a username more than 3 letters!"
                 print("Please enter a username more than 3 letters!")
@@ -236,8 +237,6 @@ def registerPage():
                 print("Please enter a email more than 6 characters!")
                 return render_template('register.html', form=form, error=error)
 
-            email = form.email.data
-            password = sha256_crypt.encrypt(str(form.password.data))
             print(username, email, password)
             c, conn = connection()
             x = c.execute("SELECT * FROM Users WHERE Username = (%s)", (thwart(username)))
@@ -258,7 +257,7 @@ def registerPage():
                 session['logged_in'] = True
                 session['username'] = username
 
-                return redirect('http://127.0.0.1:5000/user/{}'.format(username), code=302)
+                return redirect('http://127.0.0.1:5000/user', code=302)
 
     except Exception as e:
         return str(e)

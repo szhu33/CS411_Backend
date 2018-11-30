@@ -202,21 +202,13 @@ def userProfilePage(username):
     posts = c.fetchall()
     printQueryResult(posts)
 
-<<<<<<< HEAD
-    #x = c.execute("SELECT * FROM Post WHERE Username = %s", username)
-    #print("number of affected rows",x)
-    #posts = c.fetchall()
-    return render_template('user.html', myUsername=username, myEmail=email, myPosts=posts)
+    return render_template('user.html', myUsername=user[0], myEmail=user[1], myPosts=posts)
 
-=======
-    return render_template('user.html', myUsername=user[0], myEmail=user[1], myPosts=posts) 
-	
->>>>>>> c8f36dd4e372f81130bf4bc5489d54022b2bd137
 @app.route('/login/',methods = ["GET","POST"])
 def loginPage():
     print("===In login page")
     form = RegistrationForm(request.form) # fill in html with form
-    if request.method == "POST" and form.validate():
+    if request.method == "POST":
         print("request method == post")
         username = form.username.data
         password = sha256_crypt.encrypt(str(form.password.data))

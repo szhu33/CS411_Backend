@@ -98,7 +98,7 @@ def searchpage():
     movies =  [[str(y) for y in x] for x in movies]
     print(movies)
 
-    return render_template('index.html', value='pig', movies_instance=movies)
+    return render_template('index.html', value='pig', movies_instance=movies, nobutton=True)
 
 @app.route('/movie/<myImdbId>', methods = ["GET", "POST"])
 def movieDetailPage(myImdbId):
@@ -200,27 +200,47 @@ def postPage():
 
     return render_template('post.html', form=form, posts=post)
 
-@app.route('/user', methods = ["GET"])
+@app.route('/user', methods = ["GET","POST"])
 def userProfilePage():
-    try:
-        print("===In User Profile Page")
+	print("===In User Profile Page")
+	try:
+		form = RegistrationForm(request.form)
+		if request.method == "POST":
+			if request.form["submitButton"] == "Delete":
+				postId = request.form.get("postId")
+				c, conn = connection()
+				x = c.execute("DELETE FROM Post WHERE postId = %s", postId)
+				conn.commit()
+				print("DELETE: number of affected rows",x)
+			elif request.form["submitButton"] == "Edit":
+				print("Pressed Edit button")
+				ImdbId = request.form.get("ImdbId")
+				print("ImdbId: ", ImdbId)
+				c, conn = connection()
+				x = c.execute("SELECT * FROM Movie WHERE ImdbId = %s", ImdbId)
+				print("SELECT: number of affected rows",x)
+				movie = c.fetchall()
+				printQueryResult(movie)
+				rating = request.form.get("rating")
+				postId = request.form.get("postId")
+				print("raing", rating)
+				return redirect('http://127.0.0.1:5000/movie_edit/{}&{}'.format(ImdbId,postId), code=302)
+	except Exception as e:
+		return str(e)
 
-        c, conn = connection()
-        print("current user,", session['username'])
-        x = c.execute("SELECT * FROM Post INNER JOIN Movie On Post.ImdbId = Movie.ImdbId  WHERE Username = %s", session['username'])
+	c, conn = connection()
+	print("current user,", session['username'])
+	x = c.execute("SELECT * FROM Post INNER JOIN Movie On Post.ImdbId = Movie.ImdbId  WHERE Username = %s", session['username'])
 
-        print("number of affected rows",x)
-        posts = c.fetchall()
-        if int(len(posts)) > 0:
-            printQueryResult(posts)
-        else:
-            posts = []
-        print("NO posts:", posts)
+	print("number of affected rows",x)
+	posts = c.fetchall()
+	if int(len(posts)) > 0:
+		printQueryResult(posts)
+	else:
+		posts = []
+	print("NO posts:", posts)
 
-    except Exception as e:
-        return str(e)
-
-    return render_template('user.html', myUsername=session['username'], myPosts=posts)
+	return render_template('user.html', myUsername=session['username'], myPosts=posts)
 
 @app.route('/login/', methods = ["GET","POST"])
 def loginPage():

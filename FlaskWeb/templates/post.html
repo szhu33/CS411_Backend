@@ -45,33 +45,58 @@
 							var posts_list =  myFunc({{posts|tojson}});
 							//window.alert()
 							for(var i = 0; i < posts_list.length; i ++){
-								var num = Math.floor(Math.random() * (13 - 1)) + 1;
-								console.log(num);
 								$('body').append(
-									'<div align="center">'+
-									'<div class="card" style="width: 25rem;">' +
-										'<img src="/static/img/pro'+num+'.png" class="card-img-top" alt="Card image cap">'+
-										'<div class="card-body">'+
-										'<h5 class="card-title">'+ posts_list[i][5]+'</h5>'+
-										'<h6 class="card-subtitle mb-2 text-muted"> Review on '+ posts_list[i][4] +'</h6>'+
-										'</div>'+
-										'<ul class="list-group list-group-flush">'+
-										'<li class="list-group-item"> Rating: ' + posts_list[i][2] + '/10</li>'+
-										'<li class="list-group-item">' + posts_list[i][1] + '</li>'+
-										'</ul>'+
-										'<div class="card-body">'+
-										'<form method="POST">'+
-											'<input type="hidden" name="postId" value=' + posts_list[i][0]+ '>'+
-												'<input type="hidden" name="rating" value=' + posts_list[i][2]+ '>'+
-											'<input type="hidden" name="review" value=' + posts_list[i][1]+ '>'+
-											'<input type="hidden" name="ImdbId" value=' + posts_list[i][3]+ '>'+
-												'<input type="submit" name="submitButton" value="Delete">'+
-												'<input type="submit" name="submitButton" value="Edit">'+
-										'</form>' +
-										'</div>'+
-										'</div>');
-							}
+									'<div class="container">'+
+										'<div class="well">'+
+												'<div class="media">'+
+													'<a class="pull-left" href="#">'+
+													'<img class="media-object" style="width: 200px;" src='+posts_list[i][7]+'>'+
+												'</a>'+
+												'<div class="media-body">'+
+													'<h2 class="media-heading">Receta 1</h4>'+
+														'<p class="text-right">By '+posts_list[i][5]+'</p>'+
+														'<p class="text-right">Rate: ' +posts_list[i][2] + '/10</p>'+
+														'<p>'+posts_list[i][1]+'</p>'+
+														'<ul class="list-inline list-unstyled">'+
+													'<li><span><i class="glyphicon glyphicon-calendar"></i> Released in '+posts_list[i][10]+'</span></li>'+
+															'<li>|</li>'+
+															'<span><i class="glyphicon glyphicon-comment"></i> '+posts_list[i][12]+' </span>'+
+															'<li>|</li>'+
+															'<li>'+
+																 '<span class="glyphicon glyphicon-star"></span>'+
+																					'<span class="glyphicon glyphicon-star"></span>'+
+																					'<span class="glyphicon glyphicon-star"></span>'+
+																					'<span class="glyphicon glyphicon-star"></span>'+
+																					'<span class="glyphicon glyphicon-star-empty"></span>'+
+															'</li>'+
+															'<li>|</li>'+
+															'<li>'+
 
+																'<form method="POST">'+
+																	'<input type="hidden" name="postId" value=' + posts_list[i][0]+ '>'+
+																		'<input type="hidden" name="rating" value=' + posts_list[i][2]+ '>'+
+																	'<input type="hidden" name="review" value=' + posts_list[i][1]+ '>'+
+																	'<input type="hidden" name="ImdbId" value=' + posts_list[i][3]+ '>'+
+																		'<input type="submit" name="submitButton" value="Delete">'+
+																'</form>' +
+															'</li>'+
+															'<li>|</li>'+
+															'<li>'+
+
+																'<form method="POST">'+
+																	'<input type="hidden" name="postId" value=' + posts_list[i][0]+ '>'+
+																		'<input type="hidden" name="rating" value=' + posts_list[i][2]+ '>'+
+																	'<input type="hidden" name="review" value=' + posts_list[i][1]+ '>'+
+																	'<input type="hidden" name="ImdbId" value=' + posts_list[i][3]+ '>'+
+																		'<input type="submit" name="submitButton" value="Edit">'+
+																'</form>' +
+															'</li>'+
+												'</ul>'+
+												 '</div>'+
+											'</div>'+
+										'</div>'+
+									'</div>');
+							}
 						</script>
 						<hr/>
 				</div>
@@ -79,6 +104,8 @@
 		</div>
 
     </div> <!-- /container -->
+
+
 
 
 <div class="container">

@@ -15,6 +15,7 @@
 
 
     <body>
+      <form c>
       <div class="center card card-image" style="background-image: url(/static/img/m1.jpg);">
 
 
@@ -23,18 +24,28 @@
 
         <div class="label">
 
-          <h3>Release Data</h3>
+          <h3>Release Year</h3>
         </div>
 
-        <div class="inputs">
-          <input name="release_date-min" size="11" maxlength="11" > to <input name="release_date-max" size="11" maxlength="11" >
+        <div class="inputs input-group">
+          <input name="release_year-min" size="4" maxlength="4" > to <input name="release_year-max" size="4" maxlength="4" >
           <br><i>Format: YYYY</i>
         </div>
       </div>
 
+      <div class="clause input-group">
+        <div class="label">
 
+          <h3>Runtime</h3>
+        </div>
+        <div class="inputs">
 
-      <div class="clause">
+          <input name="runtime-min" size="6" onkeyup="forceNumeric(this)" onchange="forceNumeric(this)"> to <input name="runtime-max" size="6" onkeyup="forceNumeric(this)" onchange="forceNumeric(this)">
+
+        </div>
+      </div>
+
+      <div class="clause input-group">
         <div class="label">
 
           <h3>User Rating</h3>
@@ -239,7 +250,7 @@
       </div>
 
 
- 
+
       <div class="clause">
         <div class="label">
 
@@ -297,9 +308,45 @@
       </div>
 
         <p>
-          <button type="submit" class="primary">Search</button>
+          <button type="submit" class="primary" method="get">Search</button>
         </p>
 
       </div>
+    </form>
+    {% if not searched %}
+    <p> Try to fill out your preference and click submit! </p>
+    {% else %}
+    <script>
+      function myFunc(vars) {
+          return vars
+      }
+      var movie_list =  myFunc({{movies_instance|tojson}});
+      console.log(movie_list);
+      for(var i = 0; i < Math.floor(movie_list.length/4) + 1; i ++)
+  			$('body').append('<div class="container-fluid padding">' +
+  								'<div class="row padding">')
+
+      $('body').append('<div class="container-fluid padding">' +
+                '<div class="row padding">'+
+                  '<div class="col-md-3">'+
+                    '<div class="card">'+
+                      '<a href="http://127.0.0.1:5000/movie/' + movie_list[0][0]  + '">' +
+                      '<img class="card-img-top movie_card" src=' + movie_list[0][1]  + '>'+
+                      '</a>' +
+                      '<div class="card-body">' +
+                        '<h4 class="card-title">' + movie_list[i+0][2] + '(' + movie_list[i+ 0][4] +')' + '</h4>'+
+                        '<p class="card-text">' + movie_list[i+0][6] + '</p>'+
+                        '<a href="#" class="btn btn-outline-secondary">'+
+                          'See Profile' +
+                        '</a>' +
+                      '</div>' +
+                    '</div>	'+
+                  '</div>'+
+                '</div>' +
+  						'</div>')
+
+    </script>
+    <p>{{movie_list}}</p>
+    {% endif %}
     </body>
 </html>

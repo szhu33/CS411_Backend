@@ -1,9 +1,17 @@
 {% extends "base.html" %}
 
 {% block body %}
-      <form c>
-      <div class="center card card-image" style="background-image: url(/static/img/m1.jpg);">
 
+      <form c>
+      <div class="center card card-image" style="background-image: url(/static/img/grey.jpg);">
+
+        <div class="form-group">
+          <div class="label">
+            <h2 class="display-2">Search Engine</h2>
+          </div>
+        </div>
+
+      <br>
       <div class="form-group">
 
         <div class="label">
@@ -11,9 +19,9 @@
           <h3>Release Year</h3>
         </div>
 
-        <div class="inputs input-group">
-          <input name="release_year-min" size="4" maxlength="4" > to <input name="release_year-max" size="4" maxlength="4" >
-          <br><i>Format: YYYY</i>
+        <div class="inputs">
+
+          <input name="release_year-min" size="4" maxlength="4" > to <input name="release_year-max" size="4" >
         </div>
       </div>
 
@@ -24,7 +32,7 @@
         </div>
         <div class="inputs">
 
-          <input name="runtime-min" size="6" onkeyup="forceNumeric(this)" onchange="forceNumeric(this)"> to <input name="runtime-max" size="6" onkeyup="forceNumeric(this)" onchange="forceNumeric(this)">
+          <input name="runtime-min" size="4" onkeyup="forceNumeric(this)" onchange="forceNumeric(this)"> to <input name="runtime-max" size="4" onkeyup="forceNumeric(this)" onchange="forceNumeric(this)">
 
         </div>
       </div>
@@ -246,10 +254,10 @@
           <table>
             <tbody>
             <tr>
-              <td><input id="genres-1" type="checkbox" name="genres" value="action"> <label for="genres-1">Action</label></td>
-              <td><input id="genres-2" type="checkbox" name="genres" value="adventure"> <label for="genres-2">Adventure</label></td>
-              <td><input id="genres-3" type="checkbox" name="genres" value="animation"> <label for="genres-3">Animation</label></td>
-              <td><input id="genres-4" type="checkbox" name="genres" value="biography"> <label for="genres-4">Biography</label></td>
+              <td style="width:27%"><input id="genres-1" type="checkbox" name="genres" value="action"> <label for="genres-1">Action</label></td>
+              <td style="width:27%"><input id="genres-2" type="checkbox" name="genres" value="adventure"> <label for="genres-2">Adventure</label></td>
+              <td style="width:27%"><input id="genres-3" type="checkbox" name="genres" value="animation"> <label for="genres-3">Animation</label></td>
+              <td style="width:27%"><input id="genres-4" type="checkbox" name="genres" value="biography"> <label for="genres-4">Biography</label></td>
             </tr>
             <tr>
               <td><input id="genres-5" type="checkbox" name="genres" value="comedy"> <label for="genres-5">Comedy</label></td>

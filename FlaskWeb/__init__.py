@@ -25,10 +25,6 @@ app = Flask(__name__)
 app.secret_key = b'\x9e\x02\xc2<W!A\xf8\xe2\x169:v\x97lC'
 socketio = SocketIO(app)
 
-#def messageReceived(methods=['GET', 'POST']):
- #   print('message was received!!!')
-
-
 @socketio.on('onEvent')
 def eventHandler(json, methods=['GET', 'POST']):
     print(str(json))

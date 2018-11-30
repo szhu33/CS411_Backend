@@ -6,7 +6,7 @@
     <h4> Login</h4>
     <hr>
     {% from "_fromhelper.html" import render_field %}
-    <form method=post action="/register/">
+    <form method=post action="/login/">
 			<dl>
 				{{render_field(form.username)}}
 				{{render_field(form.password)}}

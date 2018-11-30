@@ -42,6 +42,7 @@ def chatPage():
 @app.route('/', methods = ["GET"])
 def homepage():
     print("===in movie page")
+    print("current user:", session['username'])
     c, conn = connection()
     x = c.execute("SELECT * FROM Movie LIMIT 20")
     print("number of affected rows",x)
@@ -49,7 +50,7 @@ def homepage():
     printQueryResult(movies)
     movies =  [[str(y) for y in x] for x in movies]
 
-    return render_template('index.html', value='pig', movies_instance=movies)
+    return render_template('index.html', value='pig', movies_instance=movies, myUsername=session['username'])
 
 @app.route('/search', methods = ["GET"])
 def searchpage():
@@ -172,20 +173,21 @@ def postPage():
 @app.route('/user/<username>', methods = ["GET", "POST"])
 def userProfilePage(username):
     print("===In User Profile Page")
+    print("current user,", session['username'])
     c, conn = connection()
-    x = c.execute("SELECT * FROM Users WHERE Username = %s", username)
-    print("number of affected rows",x)
-    result = c.fetchall()
-    printQueryResult(result)
-    user = result[0]
-    print(user[0], user[1])
+    x = c.execute("SELECT * FROM Users WHERE Username = %s", session['username'])
+    user = c.fetchall()[0]
+    username = user[0]
+    email = user[1]
+    print(username, email)
 
     x = c.execute("SELECT * FROM Post WHERE Username = %s", username)
     print("number of affected rows",x)
     posts = c.fetchall()
     printQueryResult(posts)
 
-    return render_template('user.html', myUsername=user[0], myEmail=user[1], myPosts=posts)
+    return render_template('user.html', myUsername=username, myEmail=email, myPosts=posts)
+    #return redirect('http://127.0.0.1:5000/user/{}'.format(user[0]), code=302)
 
 @app.route('/login/',methods = ["GET","POST"])
 def loginPage():

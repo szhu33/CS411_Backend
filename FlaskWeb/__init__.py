@@ -292,18 +292,26 @@ def logoutPage():
 @app.route('/explore',methods = ["GET","POST"])
 def explorePage():
     print("===in explore page")
+    if (len(request.args) == 0):
+	    print("dalse")
+	    return render_template("search.html", searched=False)
+
     yearmin = request.args.get('release_year-min')
     yearmax = request.args.get('release_year-max')
+    runtimemin = request.args.get('runtime-min')
+    runtimemax = request.args.get('runtime-max')
     ratingmin = request.args.get('user_rating-min')
     ratingmax = request.args.get('user_rating-max')
     genres = request.args.getlist('genres')
-	#
-    # c, conn = connection()
-	# sql = "SELECT * FROM Movie WHERE releaseYear>=%d AND releaseYear<=%d AND runtime>%d AND runtime<%d AND rating>=%d AND rating<=%d"
-	# x = c.execute(sql, (yearmin,yearmax,r))
-	# print(request.args)
+    c, conn = connection()
+    sql = "SELECT * FROM Movie WHERE releaseYear>=%s AND releaseYear<=%s AND runtime>%s AND runtime<%s AND rating>=%s AND rating<=%s ORDER BY rating ASC LIMIT 20"
+    x = c.execute(sql, (yearmin,yearmax,runtimemin,runtimemax,ratingmin,ratingmax))
+    movies = c.fetchall()
+    print(movies)
 
-    return render_template("search.html")
+    movies =  [[str(y) for y in x] for x in movies]
+
+    return render_template("search.html", searched=True, movies_instance=movies)
 
 if __name__ == "__main__":
     app.run()

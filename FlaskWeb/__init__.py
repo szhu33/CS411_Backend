@@ -207,37 +207,54 @@ def userProfilePage(username):
 @app.route('/login/',methods = ["GET","POST"])
 def loginPage():
     print("===In login page")
+    error = ""
     form = RegistrationForm(request.form) # fill in html with form
     if request.method == "POST":
+<<<<<<< HEAD
         print("request method == post")
+=======
+>>>>>>> b224973b395e1073f529f96c71ac872a7d4ebac2
         username = form.username.data
-        password = sha256_crypt.encrypt(str(form.password.data))
-        print(username, password)
+        #password = sha256_crypt.encrypt(str(form.password.data))
+        #print(username, password)
         c, conn = connection()
         x = c.execute("SELECT * FROM Users WHERE Username = (%s)", (thwart(username)))
-        print(int(x))
-        if int(x) > 0:
-			# set session for this new user
+        if int(x) == 0:
+            error = "No such user!"
+            print("No such user!")
+            return render_template("login.html", form=form, error=error)
+
+        user = c.fetchall()[0]
+        if sha256_crypt.verify(form.password.data, user[2]):
             session['logged_in'] = True
             session['username'] = username
             return redirect('http://127.0.0.1:5000/user/{}'.format(username), code=302)
-        else:
-            print("Please register first!")
-            flash("Please register first!")
 
-    return render_template("login.html", form=form)
+        else:
+            error = "Invalid username or password!"
+            print("Invalid username or password")
+
+    return render_template("login.html", form=form, error=error)
 
 @app.route('/register/',methods = ["GET","POST"])
 def registerPage():
     print("===In register page")
+    error = ""
     try:
         form = RegistrationForm(request.form) # fill in html with form
-        if request.method == "POST" and form.validate():
+        if request.method == "POST":
             print("request method == post")
             username = form.username.data
             if len(username) < 4:
-                alert("Please enter a username more than 3 letters!")
-                return render_template('register.html', form = form)
+                error = "Please enter a username more than 3 letters!"
+                print("Please enter a username more than 3 letters!")
+                return render_template('register.html', form=form, error=error)
+
+            if len(email) < 6:
+                error = "Please enter a email more than 6 characters!"
+                print("Please enter a email more than 6 characters!")
+                return render_template('register.html', form=form, error=error)
+
             email = form.email.data
             password = sha256_crypt.encrypt(str(form.password.data))
             print(username, email, password)

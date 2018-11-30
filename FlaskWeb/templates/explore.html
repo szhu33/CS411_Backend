@@ -4,9 +4,7 @@
       <form c>
       <div class="center card card-image" style="background-image: url(/static/img/m1.jpg);">
 
-
-
-      <div class="clause">
+      <div class="form-group">
 
         <div class="label">
 
@@ -19,7 +17,7 @@
         </div>
       </div>
 
-      <div class="clause input-group">
+      <div class="form-group">
         <div class="label">
 
           <h3>Runtime</h3>
@@ -31,7 +29,7 @@
         </div>
       </div>
 
-      <div class="clause input-group">
+      <div class="form-group">
         <div class="label">
 
           <h3>User Rating</h3>
@@ -237,7 +235,7 @@
 
 
 
-      <div class="clause">
+      <div class="form-group">
         <div class="label">
 
           <h3>Genres</h3>
@@ -300,7 +298,18 @@
       </div>
     </form>
     {% if not searched %}
-    <p> Try to fill out your preference and click submit! </p>
+    <div class="container-fluid padding">
+    <div class="row welcome text-center">
+    	<div class="col-12">
+    		<h1 class="display-4">Want to find some movies?</h1>
+    	</div>
+    	<hr>
+    	<div class="col-12">
+    		<p class="lead">Try to fill out your preference and click submit!
+    		</p>
+    	</div>
+    </div>
+    </div>
     {% else %}
     <script>
       function myFunc(vars) {
@@ -308,29 +317,176 @@
       }
       var movie_list =  myFunc({{movies_instance|tojson}});
       console.log(movie_list);
-      for(var i = 0; i < Math.floor(movie_list.length/4) + 1; i ++)
-  			$('body').append('<div class="container-fluid padding">' +
-  								'<div class="row padding">')
+      for(var i = 0; i < Math.floor(movie_list.length/4) + 1; i ++){
+  				if(4 * i + 4 < movie_list.length){
+  					$('body').append(
+  								'<div class="container-fluid padding">' +
+  								'<div class="row padding">' +
+  								'<div class="col-md-3">'+
+  									'<div class="card">'+
+  										'<a href="http://127.0.0.1:5000/movie/' + movie_list[4*i + 0][0]  + '">' +
+  										'<img class="card-img-top movie_card" src=' + movie_list[4*i + 0][1]  + '>'+
+  										'</a>' +
+  										'<div class="card-body">' +
+  											'<h4 class="card-title">' + movie_list[4*i + 0][2] + '(' + movie_list[4*i + 0][4] +')' + '</h4>'+
+  											'<p class="card-text">' + movie_list[4*i + 0][6] + '</p>'+
+  											'<a href="#" class="btn btn-outline-secondary">'+
+  												'See Profile' +
+  											'</a>' +
+  										'</div>' +
+  									'</div>	'+
+  								'</div>' +
+  								'<div class="col-md-3">'+
+  									'<div class="card">'+
+  										'<a href="http://127.0.0.1:5000/movie/' + movie_list[4*i + 1][0]  + '">' +
+  										'<img class="card-img-top movie_card" src=' + movie_list[4*i + 1][1] + '>'+
+  										'</a>' +
+  										'<div class="card-body">' +
+  											'<h4 class="card-title">' + movie_list[4*i + 1][2] + '(' + movie_list[4*i + 1][4] +')'+ '</h4>'+
+  											'<p class="card-text">' + movie_list[4*i + 1][6] + '</p>'+
+  											'<a href="#" class="btn btn-outline-secondary">'+
+  												'See Profile' +
+  											'</a>' +
+  										'</div>' +
+  									'</div>	'+
+  								'</div>' +
+  								'<div class="col-md-3">'+
+  									'<div class="card">'+
+  										'<a href="http://127.0.0.1:5000/movie/' + movie_list[4*i + 2][0]  + '">' +
+  										'<img class="card-img-top movie_card"  src=' + movie_list[4*i + 2][1] + '>'+
+  										'</a>' +
+  										'<div class="card-body">' +
+  											'<h4 class="card-title">' + movie_list[4*i + 2][2] + '(' + movie_list[4*i + 2][4] +')' +  '</h4>'+
+  											'<p class="card-text">' + movie_list[4*i + 2][6]  + '</p>'+
+  											'<a href="#" class="btn btn-outline-secondary">'+
+  												'See Profile' +
+  											'</a>' +
+  										'</div>' +
+  									'</div>	'+
+  								'</div>' +
+  								'<div class="col-md-3">'+
+  									'<div class="card">'+
+  										'<a href="http://127.0.0.1:5000/movie/' + movie_list[4*i + 3][0]  + '">' +
+  										'<img class="card-img-top movie_card" src=' + movie_list[4*i + 3][1] + '>'+
+  										'</a>' +
+  										'<div class="card-body">' +
+  											'<h4 class="card-title">' + movie_list[4*i + 3][2] + '(' + movie_list[4*i + 3][4] +')' + '</h4>'+
+  											'<p class="card-text">' + movie_list[4*i + 3][6] + '</p>'+
+  											'<a href="#" class="btn btn-outline-secondary">'+
+  												'See Profile' +
+  											'</a>' +
+  										'</div>' +
+  									'</div>	'+
+  								'</div>' +
+  								'</div>' +
+  								'</div>');
 
-      $('body').append('<div class="container-fluid padding">' +
-                '<div class="row padding">'+
-                  '<div class="col-md-3">'+
-                    '<div class="card">'+
-                      '<a href="http://127.0.0.1:5000/movie/' + movie_list[0][0]  + '">' +
-                      '<img class="card-img-top movie_card" src=' + movie_list[0][1]  + '>'+
-                      '</a>' +
-                      '<div class="card-body">' +
-                        '<h4 class="card-title">' + movie_list[i+0][2] + '(' + movie_list[i+ 0][4] +')' + '</h4>'+
-                        '<p class="card-text">' + movie_list[i+0][6] + '</p>'+
-                        '<a href="#" class="btn btn-outline-secondary">'+
-                          'See Profile' +
-                        '</a>' +
-                      '</div>' +
-                    '</div>	'+
-                  '</div>'+
-                '</div>' +
-  						'</div>')
+  				}else if(4 * i + 3 <= movie_list.length){
+  					$('body').append(
+  								'<div class="container-fluid padding">' +
+  								'<div class="row padding">' +
+  								'<div class="col-md-3">'+
+  									'<div class="card">'+
+  										'<a href="http://127.0.0.1:5000/movie/' + movie_list[4*i + 0][0]  + '">' +
+  										'<img class="card-img-top movie_card" src=' + movie_list[4*i + 0][1]  + '>'+
+  										'</a>' +
+  										'<div class="card-body">' +
+  											'<h4 class="card-title">' + movie_list[4*i + 0][2] + '(' + movie_list[4*i + 0][4] +')' + '</h4>'+
+  											'<p class="card-text">' + movie_list[4*i + 0][6] + '</p>'+
+  											'<a href="#" class="btn btn-outline-secondary">'+
+  												'See Profile' +
+  											'</a>' +
+  										'</div>' +
+  									'</div>	'+
+  								'</div>' +
+  								'<div class="col-md-3">'+
+  									'<div class="card">'+
+  										'<a href="http://127.0.0.1:5000/movie/' + movie_list[4*i + 1][0]  + '">' +
+  										'<img class="card-img-top movie_card" src=' + movie_list[4*i + 1][1] + '>'+
+  										'</a>' +
+  										'<div class="card-body">' +
+  											'<h4 class="card-title">' + movie_list[4*i + 1][2] + '(' + movie_list[4*i + 1][4] +')'+ '</h4>'+
+  											'<p class="card-text">' + movie_list[4*i + 1][6] + '</p>'+
+  											'<a href="#" class="btn btn-outline-secondary">'+
+  												'See Profile' +
+  											'</a>' +
+  										'</div>' +
+  									'</div>	'+
+  								'</div>' +
+  								'<div class="col-md-3">'+
+  									'<div class="card">'+
+  										'<a href="http://127.0.0.1:5000/movie/' + movie_list[4*i + 2][0]  + '">' +
+  										'<img class="card-img-top movie_card"  src=' + movie_list[4*i + 2][1] + '>'+
+  										'</a>' +
+  										'<div class="card-body">' +
+  											'<h4 class="card-title">' + movie_list[4*i + 2][2] + '(' + movie_list[4*i + 2][4] +')' +  '</h4>'+
+  											'<p class="card-text">' + movie_list[4*i + 2][6]  + '</p>'+
+  											'<a href="#" class="btn btn-outline-secondary">'+
+  												'See Profile' +
+  											'</a>' +
+  										'</div>' +
+  									'</div>	'+
+  								'</div>'+
+  								'</div>' +
+  								'</div>');
 
+  				}else if(4 * i + 2 <= movie_list.length){
+  					$('body').append(
+  								'<div class="container-fluid padding">' +
+  								'<div class="row padding">' +
+  								'<div class="col-md-3">'+
+  									'<div class="card">'+
+  										'<a href="http://127.0.0.1:5000/movie/' + movie_list[4*i + 0][0]  + '">' +
+  										'<img class="card-img-top movie_card" src=' + movie_list[4*i + 0][1]  + '>'+
+  										'</a>' +
+  										'<div class="card-body">' +
+  											'<h4 class="card-title">' + movie_list[4*i + 0][2] + '(' + movie_list[4*i + 0][4] +')' + '</h4>'+
+  											'<p class="card-text">' + movie_list[4*i + 0][6] + '</p>'+
+  											'<a href="#" class="btn btn-outline-secondary">'+
+  												'See Profile' +
+  											'</a>' +
+  										'</div>' +
+  									'</div>	'+
+  								'</div>' +
+  								'<div class="col-md-3">'+
+  									'<div class="card">'+
+  										'<a href="http://127.0.0.1:5000/movie/' + movie_list[4*i + 1][0]  + '">' +
+  										'<img class="card-img-top movie_card" src=' + movie_list[4*i + 1][1] + '>'+
+  										'</a>' +
+  										'<div class="card-body">' +
+  											'<h4 class="card-title">' + movie_list[4*i + 1][2] + '(' + movie_list[4*i + 1][4] +')'+ '</h4>'+
+  											'<p class="card-text">' + movie_list[4*i + 1][6] + '</p>'+
+  											'<a href="#" class="btn btn-outline-secondary">'+
+  												'See Profile' +
+  											'</a>' +
+  										'</div>' +
+  									'</div>	'+
+  								'</div>' +
+  								'</div>' +
+  								'</div>');
+
+  				}else if(4 * i + 1 <= movie_list.length){
+  					$('body').append(
+  								'<div class="container-fluid padding">' +
+  								'<div class="row padding">' +
+  								'<div class="col-md-3">'+
+  									'<div class="card">'+
+  										'<a href="http://127.0.0.1:5000/movie/' + movie_list[4*i + 0][0]  + '">' +
+  										'<img class="card-img-top movie_card" src=' + movie_list[4*i + 0][1]  + '>'+
+  										'</a>' +
+  										'<div class="card-body">' +
+  											'<h4 class="card-title">' + movie_list[4*i + 0][2] + '(' + movie_list[4*i + 0][4] +')' + '</h4>'+
+  											'<p class="card-text">' + movie_list[4*i + 0][6] + '</p>'+
+  											'<a href="#" class="btn btn-outline-secondary">'+
+  												'See Profile' +
+  											'</a>' +
+  										'</div>' +
+  									'</div>	'+
+  								'</div>' +
+  								'</div>' +
+  								'</div>');
+  				}
+  		}
     </script>
     <p>{{movie_list}}</p>
     {% endif %}

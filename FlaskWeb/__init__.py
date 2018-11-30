@@ -226,7 +226,7 @@ def loginPage():
 
     return render_template("login.html", form=form, error=error)
 
-@app.route('/register',methods = ["GET","POST"])
+@app.route('/register/',methods = ["GET","POST"])
 def registerPage():
     print("===In register page")
     error = ""

@@ -29,6 +29,7 @@ socketio = SocketIO(app)
 def join(message):
     join_room(message['room'])
     print('join')
+    send("User", )
 
 @socketio.on('connect')
 def test_connect(message):
@@ -49,11 +50,12 @@ def send_inquiry(msg):
         'Name': session['username'],
         'msg': msg['msg']
     }
-    emit('getInquiry',msg)
+    emit('getInquiry', data, room=msg['room'])
 
 @app.route('/chat')
 def chatPage():
-	return render_template('chat.html', username=session['username'])
+    print("USERNAME:", session['username'])
+    return render_template('chat-room.html', username=session['username'])
 
 
 @app.route('/', methods = ["GET"])
@@ -129,7 +131,6 @@ def movieDetailEditPage(ImdbId, postId):
         form = RegistrationForm(request.form)
         if request.method == "POST":
             print("Pressed postButton")
-            #movie = request.form['movie']
             review = request.form['review']
             rating = request.form['rating']
             c, conn = connection()
@@ -212,8 +213,6 @@ def loginPage():
     form = RegistrationForm(request.form) # fill in html with form
     if request.method == "POST":
         username = form.username.data
-        #password = sha256_crypt.encrypt(str(form.password.data))
-        #print(username, password)
         c, conn = connection()
         x = c.execute("SELECT * FROM Users WHERE Username = (%s)", (thwart(username)))
         if int(x) == 0:
@@ -238,10 +237,13 @@ def registerPage():
     print("===In register page")
     error = ""
     try:
-        form = RegistrationForm(request.form) # fill in html with form
         if request.method == "POST":
             print("request method == post")
+            email = form.email.data
+            password = sha256_crypt.encrypt(str(form.password.data))
             username = form.username.data
+            print(username, email, password)
+
             if len(username) < 4:
                 error = "Please enter a username more than 3 letters!"
                 print("Please enter a username more than 3 letters!")
@@ -252,9 +254,6 @@ def registerPage():
                 print("Please enter a email more than 6 characters!")
                 return render_template('register.html', form=form, error=error)
 
-            email = form.email.data
-            password = sha256_crypt.encrypt(str(form.password.data))
-            print(username, email, password)
             c, conn = connection()
             x = c.execute("SELECT * FROM Users WHERE Username = (%s)", (thwart(username)))
             if int(x) > 0:
@@ -282,4 +281,4 @@ def registerPage():
     return render_template("register.html", form=form)
 
 if __name__ == "__main__":
-    app.run()
+    socketio.run(app)

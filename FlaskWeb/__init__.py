@@ -36,7 +36,7 @@ def handle_my_custom_event(json, methods=['GET', 'POST']):
 
 @app.route('/chat')
 def chatPage():
-	return render_template('chat.html', username=session['username'])
+	return render_template('chat.html', myUsername=session['username'])
 
 
 @app.route('/', methods = ["GET"])
@@ -197,7 +197,7 @@ def userProfilePage():
 
     return render_template('user.html', myUsername=username, myEmail=email, myPosts=posts)
 
-@app.route('/login', methods = ["GET","POST"])
+@app.route('/login/', methods = ["GET","POST"])
 def loginPage():
     print("===In login page")
     error = ""

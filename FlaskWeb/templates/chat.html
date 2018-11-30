@@ -138,14 +138,13 @@
 
 
     <form action="" method="POST">
-      <input type="text" class="username" size="14" placeholder="User Name"/>
-      <br>
+  
       <input type="text" class="message" size="60" style="height:200px" placeholder="Messages"/>
       <br>
       <input type="submit"/>
     </form>
 
-    <h3 style='color: #ccc;font-size: 30px;'>No message yet..</h3> 
+    <h3 style='color: #ccc;font-size: 30px;'>No message yet..</h3>
     <div class="message_holder"></div>
 
 
@@ -154,13 +153,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
     <script type="text/javascript">
       var socket = io.connect('http://' + document.domain + ':' + location.port);
+      function myFunc(vars) {
+          return vars
+      }
       socket.on( 'connect', function() {
         socket.emit( 'my event', {
           data: 'User Connected'
         } )
         var form = $( 'form' ).on( 'submit', function( e ) {
           e.preventDefault()
-          let user_name = $( 'input.username' ).val()
+
+          let user_name = myFunc({{myUsername|tojson}});
+          console.log('username', user_name);
           let user_input = $( 'input.message' ).val()
           socket.emit( 'my event', {
             user_name : user_name,
@@ -177,8 +181,8 @@
           console.log( cnt )
           $( 'h3' ).remove()
           /**
-          $( 'div.message_holder' ).append( 
-            '<div><b style="color: #000">'+msg.user_name+'</b> '+msg.message+'</div>' 
+          $( 'div.message_holder' ).append(
+            '<div><b style="color: #000">'+msg.user_name+'</b> '+msg.message+'</div>'
             )
           */if(cnt % 4 == 0){
               $( 'div.message_holder' ).append(

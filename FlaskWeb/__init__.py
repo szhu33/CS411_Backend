@@ -183,7 +183,7 @@ def userProfilePage():
         print(username, email)
 
         x = c.execute("SELECT * FROM Post WHERE Username = %s", username)
-		
+
         print("number of affected rows",x)
         posts = c.fetchall()
         if int(len(posts)) > 0:

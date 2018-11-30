@@ -210,10 +210,6 @@ def loginPage():
     error = ""
     form = RegistrationForm(request.form) # fill in html with form
     if request.method == "POST":
-<<<<<<< HEAD
-        print("request method == post")
-=======
->>>>>>> b224973b395e1073f529f96c71ac872a7d4ebac2
         username = form.username.data
         #password = sha256_crypt.encrypt(str(form.password.data))
         #print(username, password)
@@ -284,12 +280,30 @@ def registerPage():
 
     return render_template("register.html", form=form)
 
+
+@app.route('/logout',methods = ["GET"])
+def logoutPage():
+
+	session['logged_in'] = False
+	session['username'] = ""
+
+	return redirect('http://127.0.0.1:5000')
+
 @app.route('/explore',methods = ["GET","POST"])
 def explorePage():
     print("===in explore page")
-    keyword = request.args.get('keyword')
+    yearmin = request.args.get('release_year-min')
+    yearmax = request.args.get('release_year-max')
+    ratingmin = request.args.get('user_rating-min')
+    ratingmax = request.args.get('user_rating-max')
+    genres = request.args.getlist('genres')
+	#
+    # c, conn = connection()
+	# sql = "SELECT * FROM Movie WHERE releaseYear>=%d AND releaseYear<=%d AND runtime>%d AND runtime<%d AND rating>=%d AND rating<=%d"
+	# x = c.execute(sql, (yearmin,yearmax,r))
+	# print(request.args)
 
-    return render_template("register.html", form=form)
+    return render_template("search.html")
 
 if __name__ == "__main__":
     app.run()

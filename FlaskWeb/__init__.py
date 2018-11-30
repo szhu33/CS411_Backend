@@ -273,5 +273,10 @@ def explorePage():
 
     return render_template("register.html", form=form)
 
+@app.route('/logout/',methods = ["GET","POST"])
+def logoutPage():
+    session['username'] = ""
+    session['logged_in'] = False
+
 if __name__ == "__main__":
     socketio.run(app, debug=True)

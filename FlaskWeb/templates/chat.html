@@ -138,7 +138,7 @@
 
 
     <form action="" method="POST">
-  
+
       <input type="text" class="message" size="60" style="height:200px" placeholder="Messages"/>
       <br>
       <input type="submit"/>
@@ -157,7 +157,7 @@
           return vars
       }
       socket.on( 'connect', function() {
-        socket.emit( 'my event', {
+        socket.emit( 'onEvent', {
           data: 'User Connected'
         } )
         var form = $( 'form' ).on( 'submit', function( e ) {
@@ -166,7 +166,7 @@
           let user_name = myFunc({{myUsername|tojson}});
           console.log('username', user_name);
           let user_input = $( 'input.message' ).val()
-          socket.emit( 'my event', {
+          socket.emit( 'onEvent', {
             user_name : user_name,
             message : user_input
           } )

@@ -25,6 +25,8 @@ app = Flask(__name__)
 app.secret_key = b'\x9e\x02\xc2<W!A\xf8\xe2\x169:v\x97lC'
 socketio = SocketIO(app)
 
+offset = 0
+
 @socketio.on('onEvent')
 def eventHandler(json, methods=['GET', 'POST']):
     print(str(json))
@@ -35,12 +37,44 @@ def chatPage():
 	return render_template('chat.html', myUsername=session['username'])
 
 
-@app.route('/', methods = ["GET"])
+@app.route('/', methods = ["GET", "POST"])
 def homepage():
+
     print("===in movie page")
-    #print("current user:", session['username'])
+    global offset
+    try:
+        form = RegistrationForm(request.form)
+        if request.method == "POST":
+            if request.form["submitButton"] == "Next":
+                print("Clicked Next button")
+                offset += 20
+                c, conn = connection()
+                print("offset:", offset)
+                x = c.execute("SELECT * FROM Movie ORDER BY rating DESC LIMIT 20 OFFSET %s", offset)
+                movies = c.fetchall()
+                printQueryResult(movies)
+                movies =  [[str(y) for y in x] for x in movies]
+                return render_template('index.html', value='pig', movies_instance=movies)
+            elif request.form["submitButton"] == "Previous":
+                print("Clicked Previous button")
+                if offset - 20 <= 0:
+                    offset = 0
+                else:
+                    offset -= 20
+                c, conn = connection()
+                print("offset:", offset)
+                x = c.execute("SELECT * FROM Movie ORDER BY rating DESC LIMIT 20 OFFSET %s", offset)
+                movies = c.fetchall()
+                printQueryResult(movies)
+                movies =  [[str(y) for y in x] for x in movies]
+                return render_template('index.html', value='pig', movies_instance=movies)
+
+    except Exception as e:
+        return str(e)
+
+    print("offset:", offset)
     c, conn = connection()
-    x = c.execute("SELECT * FROM Movie LIMIT 20")
+    x = c.execute("SELECT * FROM Movie ORDER BY rating DESC LIMIT 20 OFFSET %s", offset)
     print("number of affected rows",x)
     movies = c.fetchall()
     printQueryResult(movies)

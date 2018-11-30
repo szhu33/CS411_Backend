@@ -25,22 +25,35 @@ app = Flask(__name__)
 app.secret_key = b'\x9e\x02\xc2<W!A\xf8\xe2\x169:v\x97lC'
 socketio = SocketIO(app)
 
+@socketio.on('join')
+def join(message):
+    join_room(message['room'])
+    print('join')
 
+@socketio.on('connect')
+def test_connect(message):
+    print(session['username'], 'connected')
 
-def messageReceived(methods=['GET', 'POST']):
-    print('message was received!!!')
-
-
-@socketio.on('my event')
-def handle_my_custom_event(json, methods=['GET', 'POST']):
-    print('received my event: ' + str(json))
-    socketio.emit('my response', json, callback=messageReceived)
-
+@socketio.on('sendInquiry')
+def send_inquiry(msg):
+    createDate = datetime.now()
+    print("User", session['username'], "sent", msg, "at time", createDate)
+    c, conn = connection()
+    x = c.execute("INSERT INTO Message(Username, Message, CreateDate) VALUES (%s, %s, %s)", (session['username'], msg, createDate))
+    conn.commit()
+    if int(x)>0:
+        print("INSERT MESSAGE SUCCESS")
+    print("INSERT: number of affected rows",x)
+    data = {
+        'time': createDate.strftime('%H:%M'),
+        'Name': session['username'],
+        'msg': msg['msg']
+    }
+    emit('getInquiry',msg)
 
 @app.route('/chat')
 def chatPage():
-    print("USERNAME:", session['username'])
-    return render_template('chat.html', username=session['username'])
+	return render_template('chat.html', username=session['username'])
 
 
 @app.route('/', methods = ["GET"])
@@ -115,6 +128,7 @@ def movieDetailEditPage(ImdbId, postId):
         form = RegistrationForm(request.form)
         if request.method == "POST":
             print("Pressed postButton")
+            #movie = request.form['movie']
             review = request.form['review']
             rating = request.form['rating']
             c, conn = connection()
@@ -196,8 +210,9 @@ def loginPage():
     error = ""
     form = RegistrationForm(request.form) # fill in html with form
     if request.method == "POST":
-        print("request method == post")
         username = form.username.data
+        #password = sha256_crypt.encrypt(str(form.password.data))
+        #print(username, password)
         c, conn = connection()
         x = c.execute("SELECT * FROM Users WHERE Username = (%s)", (thwart(username)))
         if int(x) == 0:
@@ -221,15 +236,11 @@ def loginPage():
 def registerPage():
     print("===In register page")
     error = ""
-    form = RegistrationForm(request.form) # fill in html with form
     try:
+        form = RegistrationForm(request.form) # fill in html with form
         if request.method == "POST":
             print("request method == post")
-            email = form.email.data
-            password = sha256_crypt.encrypt(str(form.password.data))
             username = form.username.data
-            print(username, email, password)
-
             if len(username) < 4:
                 error = "Please enter a username more than 3 letters!"
                 print("Please enter a username more than 3 letters!")
@@ -240,6 +251,9 @@ def registerPage():
                 print("Please enter a email more than 6 characters!")
                 return render_template('register.html', form=form, error=error)
 
+            email = form.email.data
+            password = sha256_crypt.encrypt(str(form.password.data))
+            print(username, email, password)
             c, conn = connection()
             x = c.execute("SELECT * FROM Users WHERE Username = (%s)", (thwart(username)))
             if int(x) > 0:
@@ -266,12 +280,30 @@ def registerPage():
 
     return render_template("register.html", form=form)
 
+
+@app.route('/logout',methods = ["GET"])
+def logoutPage():
+
+	session['logged_in'] = False
+	session['username'] = ""
+
+	return redirect('http://127.0.0.1:5000')
+
 @app.route('/explore',methods = ["GET","POST"])
 def explorePage():
     print("===in explore page")
-    keyword = request.args.get('keyword')
+    yearmin = request.args.get('release_year-min')
+    yearmax = request.args.get('release_year-max')
+    ratingmin = request.args.get('user_rating-min')
+    ratingmax = request.args.get('user_rating-max')
+    genres = request.args.getlist('genres')
+	#
+    # c, conn = connection()
+	# sql = "SELECT * FROM Movie WHERE releaseYear>=%d AND releaseYear<=%d AND runtime>%d AND runtime<%d AND rating>=%d AND rating<=%d"
+	# x = c.execute(sql, (yearmin,yearmax,r))
+	# print(request.args)
 
-    return render_template("register.html", form=form)
+    return render_template("search.html")
 
 if __name__ == "__main__":
-    socketio.run(app, debug=True)
+    app.run()

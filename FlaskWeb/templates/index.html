@@ -25,6 +25,14 @@
 				<li class="nav-item">
 					<a class="nav-link" href="http://127.0.0.1:5000">MOVIES</a>
 				</li>
+
+				<li class="nav-item">
+					<a class="nav-link" href="http://127.0.0.1:5000/explore">EXPLORE</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="http://127.0.0.1:5000/post">POST</a>
+				</li>
+
 		    {% if not session.logged_in %}
 					<li class="nav-item">
 						<a class="nav-link" href="http://127.0.0.1:5000/login">LOGIN</a>
@@ -39,10 +47,12 @@
 					<li class="nav-item">
 						<a class="nav-link active" href="http://127.0.0.1:5000/chat">CHATTING</a>
 					</li>
+
+					<li class="nav-item">
+						<a class="nav-link active" href="http://127.0.0.1:5000/logout">LOGOUT</a>
+					</li>
 		    {% endif %}
-				<li class="nav-item">
-					<a class="nav-link" href="http://127.0.0.1:5000/post">POST</a>
-				</li>
+
 			</ul>
 		</div>
 	</div>

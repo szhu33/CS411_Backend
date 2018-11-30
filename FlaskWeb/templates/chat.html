@@ -158,16 +158,15 @@
       }
       socket.on( 'connect', function() {
         socket.emit( 'onEvent', {
-          data: 'User Connected'
+          myevent: 'User Connected'
         } )
         var form = $( 'form' ).on( 'submit', function( e ) {
           e.preventDefault()
 
           let user_name = myFunc({{myUsername|tojson}});
-          console.log('username', user_name);
           let user_input = $( 'input.message' ).val()
           socket.emit( 'onEvent', {
-            user_name : user_name,
+            username : user_name,
             message : user_input
           } )
           $( 'input.message' ).val( '' ).focus()
@@ -176,7 +175,7 @@
       var cnt = 0
       socket.on( 'my response', function( msg ) {
         console.log( msg )
-        if( typeof msg.user_name !== 'undefined' ) {
+        if( typeof msg.username !== 'undefined' ) {
           cnt = cnt + 1;
           console.log( cnt )
           $( 'h3' ).remove()
@@ -189,7 +188,7 @@
                       '<div class="col-md-12 post_instance">' +
                         '<img src="/static/img/' + 'ano.jpg' + '" class="img-rounded">'+
                         '<form method="POST">'+
-                        '<div> <strong>User Name</strong> :' + msg.user_name + '</div>'+
+                        '<div> <strong>User Name</strong> :' + msg.username + '</div>'+
                         '<div> <strong>User Message</strong> : ' + msg.message + '</div>'+
                       '</div>'+
                       '<br>'
@@ -201,7 +200,7 @@
                       '<div class="col-md-12 post_instance">' +
                         '<img src="/static/img/' + 'pic1.jpeg' + '" class="img-rounded">'+
                         '<form method="POST">'+
-                        '<div> <strong>User Name</strong> :' + msg.user_name + '</div>'+
+                        '<div> <strong>User Name</strong> :' + msg.username + '</div>'+
                         '<div> <strong>User Message</strong> : ' + msg.message + '</div>'+
                       '</div>'+
                       '<br>'
@@ -214,7 +213,7 @@
                       '<div class="col-md-12 post_instance">' +
                         '<img src="/static/img/' + 'pic2.jpeg' + '" class="img-rounded">'+
                         '<form method="POST">'+
-                        '<div> <strong>User Name</strong> :' + msg.user_name + '</div>'+
+                        '<div> <strong>User Name</strong> :' + msg.username + '</div>'+
                         '<div> <strong>User Message</strong> : ' + msg.message + '</div>'+
                       '</div>'+
                       '<br>'
@@ -226,7 +225,7 @@
                       '<div class="col-md-12 post_instance">' +
                         '<img src="/static/img/' + 'pic3.jpeg' + '" class="img-rounded">'+
                         '<form method="POST">'+
-                        '<div> <strong>User Name</strong> :' + msg.user_name + '</div>'+
+                        '<div> <strong>User Name</strong> :' + msg.username + '</div>'+
                         '<div> <strong>User Message</strong> : ' + msg.message + '</div>'+
                       '</div>'+
                       '<br>'

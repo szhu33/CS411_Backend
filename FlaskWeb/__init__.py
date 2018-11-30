@@ -34,13 +34,13 @@ def messageReceived(methods=['GET', 'POST']):
 @socketio.on('my event')
 def handle_my_custom_event(json, methods=['GET', 'POST']):
     print('received my event: ' + str(json))
-socketio.emit('my response', json, callback=messageReceived)
+    socketio.emit('my response', json, callback=messageReceived)
 
 
 @app.route('/chat')
 def chatPage():
     print("USERNAME:", session['username'])
-    return render_template('chat-room.html', username=session['username'])
+    return render_template('chat.html', username=session['username'])
 
 
 @app.route('/', methods = ["GET"])

@@ -278,7 +278,7 @@ def explorePage():
     print("===in explore page")
     if (len(request.args) == 0):
 	    print("dalse")
-	    return render_template("search.html", searched=False)
+	    return render_template("explore.html", searched=False)
 
     yearmin = request.args.get('release_year-min')
     yearmax = request.args.get('release_year-max')
@@ -295,7 +295,7 @@ def explorePage():
 
     movies =  [[str(y) for y in x] for x in movies]
 
-    return render_template("search.html", searched=True, movies_instance=movies)
+    return render_template("explore.html", searched=True, movies_instance=movies)
 
 if __name__ == "__main__":
     app.run()

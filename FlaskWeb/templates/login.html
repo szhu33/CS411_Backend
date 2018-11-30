@@ -1,8 +1,7 @@
-{% extends "header.html" %}
+{% extends "base.html" %}
 
 {% block body %}
-  <body class = "container">
-  <div class="card card-image" style="background-image: url(/static/img/m1.jpg);">
+  <div class="card card-image">
     <h4> Login</h4>
     <hr>
     {% from "_fromhelper.html" import render_field %}
@@ -19,5 +18,4 @@
 			<p class="error" style="color: red"><strong></strong>{{error}}</p >
 		{% endif %}
  </div>
-  </body>
 {% endblock %}

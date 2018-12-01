@@ -6,6 +6,7 @@ import os.path
 from pathlib import Path
 from flask import jsonify, redirect, url_for
 from pymysql import escape_string as thwart # escape SQL injection(security vulnerability )
+import pymysql
 from flask_socketio import SocketIO, emit, join_room
 from wtforms import Form, BooleanField, TextField, PasswordField, validators
 from datetime import datetime
@@ -26,6 +27,8 @@ app.secret_key = b'\x9e\x02\xc2<W!A\xf8\xe2\x169:v\x97lC'
 socketio = SocketIO(app)
 
 offset = 0
+
+modeon = False
 
 @socketio.on('onEvent')
 def eventHandler(json, methods=['GET', 'POST']):
@@ -262,6 +265,11 @@ def loginPage():
         if sha256_crypt.verify(form.password.data, user[2]):
             session['logged_in'] = True
             session['username'] = username
+            session['viewname'] = 'similar'+username
+            sql = "CREATE VIEW {`%s`} AS SELECT Username FROM Post WHERE Username <> %s AND ImdbId IN (SELECT ImdbId FROM Post WHERE Username=%s)"
+            print(sql)
+            print(session['viewname'])
+            x = c.execute(sql, (session['viewname'], session['username'], session['username']))
             return redirect('http://127.0.0.1:5000', code=302)
             #return render_template("user.html", form=form, error=error)
 
@@ -311,6 +319,7 @@ def registerPage():
                 # set session for this new user
                 session['logged_in'] = True
                 session['username'] = username
+                session['viewname'] = "similar"+username
 
                 return redirect('http://127.0.0.1:5000', code=302)
 
@@ -322,9 +331,15 @@ def registerPage():
 
 @app.route('/logout',methods = ["GET"])
 def logoutPage():
+	if 'viewname' in session.keys():
+
+		c, conn = connection()
+		sql = "DROP VIEW `%s`"
+		x = c.execute(sql, (session['viewname'],))
 
 	session['logged_in'] = False
 	session['username'] = ""
+	session['viewname'] = ""
 
 	return redirect('http://127.0.0.1:5000')
 
@@ -332,7 +347,6 @@ def logoutPage():
 def explorePage():
     print("===in explore page")
     if (len(request.args) == 0):
-	    print("dalse")
 	    return render_template("explore.html", searched=False)
 
     yearmin = request.args.get('release_year-min')
@@ -349,6 +363,15 @@ def explorePage():
     print(movies)
 
     movies =  [[str(y) for y in x] for x in movies]
+
+    if session['logged_in'] and modeon:
+	    sql2 = "SELECT ImdbId FROM Post P WHERE P.Username IN (SELECT Username FROM {0})".format(session['viewname'])
+	    print(sql2)
+	    x = c.execute(sql)
+	    movies2 = c.fetchall()
+	    print(movies2)
+	    movies2 =  [[str(y) for y in x] for x in movies2]
+	    movies = movies.extends(movies2)
 
     return render_template("explore.html", searched=True, movies_instance=movies)
 

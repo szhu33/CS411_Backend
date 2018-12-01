@@ -9,3 +9,5 @@ CREATE TABLE Movie (
     rating FLOAT(2,1),
     numOfVotes INT
 )
+CREATE INDEX search
+ON Movie (releaseYear,runtime,rating)

@@ -30,6 +30,8 @@ offset = 0
 
 modeon = False
 
+url = "http://teamplusplus.web.illinois.edu"
+
 @socketio.on('onEvent')
 def eventHandler(json, methods=['GET', 'POST']):
     print(str(json))
@@ -191,7 +193,7 @@ def postPage():
                 rating = request.form.get("rating")
                 postId = request.form.get("postId")
                 print("raing", rating)
-                return redirect('http://127.0.0.1:5000/movie_edit/{}&{}'.format(ImdbId,postId), code=302)
+                return redirect(url + '/movie_edit/{}&{}'.format(ImdbId,postId), code=302)
 
     except Exception as e:
         return str(e)
@@ -227,7 +229,7 @@ def userProfilePage():
 				rating = request.form.get("rating")
 				postId = request.form.get("postId")
 				print("raing", rating)
-				return redirect('http://127.0.0.1:5000/movie_edit/{}&{}'.format(ImdbId,postId), code=302)
+				return redirect(url + '/movie_edit/{}&{}'.format(ImdbId,postId), code=302)
 	except Exception as e:
 		return str(e)
 
@@ -270,7 +272,7 @@ def loginPage():
             print(sql)
             print(session['viewname'])
             x = c.execute(sql, (session['viewname'], session['username'], session['username']))
-            return redirect('http://127.0.0.1:5000', code=302)
+            return redirect(url, code=302)
             #return render_template("user.html", form=form, error=error)
 
         else:
@@ -321,7 +323,7 @@ def registerPage():
                 session['username'] = username
                 session['viewname'] = "similar"+username
 
-                return redirect('http://127.0.0.1:5000', code=302)
+                return redirect(url, code=302)
 
     except Exception as e:
         return str(e)
@@ -341,7 +343,7 @@ def logoutPage():
 	session['username'] = ""
 	session['viewname'] = ""
 
-	return redirect('http://127.0.0.1:5000')
+	return redirect(url)
 
 @app.route('/explore',methods = ["GET","POST"])
 def explorePage():

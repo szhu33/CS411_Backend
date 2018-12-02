@@ -6,6 +6,7 @@ import os.path
 from pathlib import Path
 from flask import jsonify, redirect, url_for
 from pymysql import escape_string as thwart # escape SQL injection(security vulnerability )
+import pymysql
 from flask_socketio import SocketIO, emit, join_room
 from wtforms import Form, BooleanField, TextField, PasswordField, validators
 from datetime import datetime
@@ -26,6 +27,8 @@ app.secret_key = b'\x9e\x02\xc2<W!A\xf8\xe2\x169:v\x97lC'
 socketio = SocketIO(app)
 
 offset = 0
+
+modeon = False
 
 @socketio.on('onEvent')
 def eventHandler(json, methods=['GET', 'POST']):
@@ -98,7 +101,7 @@ def searchpage():
     movies =  [[str(y) for y in x] for x in movies]
     print(movies)
 
-    return render_template('index.html', value='pig', movies_instance=movies)
+    return render_template('index.html', value='pig', movies_instance=movies, nobutton=True)
 
 @app.route('/movie/<myImdbId>', methods = ["GET", "POST"])
 def movieDetailPage(myImdbId):
@@ -194,38 +197,53 @@ def postPage():
         return str(e)
 
     c, conn = connection()
-    x = c.execute("SELECT * FROM Post")
+    x = c.execute("SELECT * FROM Post INNER JOIN Movie On Post.ImdbId = Movie.ImdbId")
     post = c.fetchall()
     printQueryResult(post)
 
     return render_template('post.html', form=form, posts=post)
 
-@app.route('/user', methods = ["GET"])
+@app.route('/user', methods = ["GET","POST"])
 def userProfilePage():
-    try:
-        print("===In User Profile Page")
-        print("current user,", session['username'])
-        c, conn = connection()
-        x = c.execute("SELECT * FROM Users WHERE Username = %s", session['username'])
-        user = c.fetchall()[0]
-        username = user[0]
-        email = user[1]
-        print(username, email)
+	print("===In User Profile Page")
+	try:
+		form = RegistrationForm(request.form)
+		if request.method == "POST":
+			if request.form["submitButton"] == "Delete":
+				postId = request.form.get("postId")
+				c, conn = connection()
+				x = c.execute("DELETE FROM Post WHERE postId = %s", postId)
+				conn.commit()
+				print("DELETE: number of affected rows",x)
+			elif request.form["submitButton"] == "Edit":
+				print("Pressed Edit button")
+				ImdbId = request.form.get("ImdbId")
+				print("ImdbId: ", ImdbId)
+				c, conn = connection()
+				x = c.execute("SELECT * FROM Movie WHERE ImdbId = %s", ImdbId)
+				print("SELECT: number of affected rows",x)
+				movie = c.fetchall()
+				printQueryResult(movie)
+				rating = request.form.get("rating")
+				postId = request.form.get("postId")
+				print("raing", rating)
+				return redirect('http://127.0.0.1:5000/movie_edit/{}&{}'.format(ImdbId,postId), code=302)
+	except Exception as e:
+		return str(e)
 
-        x = c.execute("SELECT * FROM Post WHERE Username = %s", username)
+	c, conn = connection()
+	print("current user,", session['username'])
+	x = c.execute("SELECT * FROM Post INNER JOIN Movie On Post.ImdbId = Movie.ImdbId  WHERE Username = %s", session['username'])
 
-        print("number of affected rows",x)
-        posts = c.fetchall()
-        if int(len(posts)) > 0:
-            printQueryResult(posts)
-        else:
-            posts = []
-        print("NO posts:", posts)
+	print("number of affected rows",x)
+	posts = c.fetchall()
+	if int(len(posts)) > 0:
+		printQueryResult(posts)
+	else:
+		posts = []
+	print("NO posts:", posts)
 
-    except Exception as e:
-        return str(e)
-
-    return render_template('user.html', myUsername=username, myEmail=email, myPosts=posts)
+	return render_template('user.html', myUsername=session['username'], myPosts=posts)
 
 @app.route('/login/', methods = ["GET","POST"])
 def loginPage():
@@ -247,6 +265,11 @@ def loginPage():
         if sha256_crypt.verify(form.password.data, user[2]):
             session['logged_in'] = True
             session['username'] = username
+            session['viewname'] = 'similar'+username
+            sql = "CREATE VIEW {`%s`} AS SELECT Username FROM Post WHERE Username <> %s AND ImdbId IN (SELECT ImdbId FROM Post WHERE Username=%s)"
+            print(sql)
+            print(session['viewname'])
+            x = c.execute(sql, (session['viewname'], session['username'], session['username']))
             return redirect('http://127.0.0.1:5000', code=302)
             #return render_template("user.html", form=form, error=error)
 
@@ -296,6 +319,7 @@ def registerPage():
                 # set session for this new user
                 session['logged_in'] = True
                 session['username'] = username
+                session['viewname'] = "similar"+username
 
                 return redirect('http://127.0.0.1:5000', code=302)
 
@@ -307,9 +331,15 @@ def registerPage():
 
 @app.route('/logout',methods = ["GET"])
 def logoutPage():
+	if 'viewname' in session.keys():
+
+		c, conn = connection()
+		sql = "DROP VIEW `%s`"
+		x = c.execute(sql, (session['viewname'],))
 
 	session['logged_in'] = False
 	session['username'] = ""
+	session['viewname'] = ""
 
 	return redirect('http://127.0.0.1:5000')
 
@@ -317,7 +347,6 @@ def logoutPage():
 def explorePage():
     print("===in explore page")
     if (len(request.args) == 0):
-	    print("dalse")
 	    return render_template("explore.html", searched=False)
 
     yearmin = request.args.get('release_year-min')
@@ -334,6 +363,15 @@ def explorePage():
     print(movies)
 
     movies =  [[str(y) for y in x] for x in movies]
+
+    if session['logged_in'] and modeon:
+	    sql2 = "SELECT ImdbId FROM Post P WHERE P.Username IN (SELECT Username FROM {0})".format(session['viewname'])
+	    print(sql2)
+	    x = c.execute(sql)
+	    movies2 = c.fetchall()
+	    print(movies2)
+	    movies2 =  [[str(y) for y in x] for x in movies2]
+	    movies = movies.extends(movies2)
 
     return render_template("explore.html", searched=True, movies_instance=movies)
 

@@ -30,7 +30,7 @@ offset = 0
 
 modeon = False
 
-url = "http://teamplusplus.web.illinois.edu"
+url = "https://moviechat.herokuapp.com/"
 
 @socketio.on('onEvent')
 def eventHandler(json, methods=['GET', 'POST']):
